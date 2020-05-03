@@ -1,8 +1,28 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <PackageId>GodelTech.Microservices.Swagger</PackageId>
+    <PackageTags>.netcore netcore microservice swagger</PackageTags>
+    <Copyright>Godel Technologies Europe</Copyright>
+    <Product>Microservice Platform</Product>
+    <Company>Godel Technologies Europe</Company>
+    <Authors>Andrei Salanoi</Authors>
+    <RepositoryUrl>https://github.com/GodelTech/GodelTech.Microservices.Swagger</RepositoryUrl>
+    <VersionPrefix>1.0.1</VersionPrefix>
+
+    <!-- SonarQube needs this -->
+    <ProjectGuid>{00000000-0000-0000-0000-000000000001}</ProjectGuid>
   </PropertyGroup>
+
+  <ItemGroup>
+
+    <PackageReference Include="GodelTech.Microservices.Core" Version="1.0.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.3.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="5.3.1" />
+
+  </ItemGroup>
+
 
 </Project>
