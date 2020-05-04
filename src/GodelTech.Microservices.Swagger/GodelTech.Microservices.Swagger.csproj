@@ -11,7 +11,7 @@
     <Authors>Andrei Salanoi</Authors>
     <RepositoryUrl>https://github.com/GodelTech/GodelTech.Microservices.Swagger</RepositoryUrl>
     <VersionPrefix>1.0.2</VersionPrefix>
-
+    <PackageIconUrl>https://www.gravatar.com/avatar/839234621070de51e7b9cabd5ceee8fe?s=64</PackageIconUrl>
     <!-- SonarQube needs this -->
     <ProjectGuid>{00000000-0000-0000-0000-000000000001}</ProjectGuid>
   </PropertyGroup>
