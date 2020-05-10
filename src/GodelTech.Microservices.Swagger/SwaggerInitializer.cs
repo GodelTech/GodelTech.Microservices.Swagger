@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GodelTech.Microservices.Core;
 using GodelTech.Microservices.Core.Mvc;
@@ -9,11 +10,14 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace GodelTech.Microservices.Swagger
 {
     public class SwaggerInitializer : MicroserviceInitializerBase
     {
+        public SwaggerInitializerOptions Options { get; set; } = new SwaggerInitializerOptions();
+
         public SwaggerInitializer(IConfiguration configuration)
             : base(configuration)
         {
@@ -29,96 +33,122 @@ namespace GodelTech.Microservices.Swagger
             });
             app.UseSwaggerUI(options =>
             {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+                options.SwaggerEndpoint($"/swagger/{Options.DocumentVersion}/swagger.json", "v1");
             });
         }
 
         public override void ConfigureServices(IServiceCollection services)
         {
-            var config = GetSwaggerConfiguration();
-            var scopes = config.SupportedScopes.ToDictionary(x => x.Name, x => x.Description);
+            var scopes = Options.SupportedScopes.ToDictionary(x => x.Name, x => x.Description);
 
             services.AddSwaggerGen(options =>
             {
-                options.AddSecurityDefinition(OAuth2Security.OAuth2, new OpenApiSecurityScheme
+                AddGenericAuthHeaderFlowSecurityDefinition(options);
+
+                if (!string.IsNullOrWhiteSpace(Options.AuthorizeEndpointUrl) &&
+                    !string.IsNullOrWhiteSpace(Options.TokenEndpointUrl))
+                    AddAuthorizationCodeSecurityDefinition(options, scopes);
+
+                if (!string.IsNullOrWhiteSpace(Options.AuthorizeEndpointUrl))
+                    AddImplicitFlowSecurityDefinition(options, scopes);
+
+
+                if (!string.IsNullOrWhiteSpace(Options.AuthorizeEndpointUrl) &&
+                    !string.IsNullOrWhiteSpace(Options.TokenEndpointUrl))
+                    AddResourceOwnerFlowSecurityDefinition(options, scopes);
+
+                if (!string.IsNullOrWhiteSpace(Options.TokenEndpointUrl))
+                    AddClientCredentialsSecurityFlowDefinition(options, scopes);
+
+                options.SwaggerDoc(Options.DocumentVersion, new OpenApiInfo
                 {
-                    Name = "Authorization",
-                    Type = SecuritySchemeType.ApiKey,
-                    In = ParameterLocation.Header,
-                    Scheme = "Bearer",
-                    BearerFormat = "JWT",
-                    Description = "Standard Authorization header using the Bearer scheme. Example: \"bearer {token}\""
+                    Title = Options.DocumentTitle, 
+                    Version = Options.DocumentVersion
                 });
 
-                options.AddSecurityDefinition(OAuth2Security.AuthorizationCode, new OpenApiSecurityScheme
+                options.EnableAnnotations();
+                options.OperationFilter<AuthorizeCheckOperationFilter>();
+            });
+        }
+
+        private static void AddGenericAuthHeaderFlowSecurityDefinition(SwaggerGenOptions options)
+        {
+            options.AddSecurityDefinition(OAuth2Security.OAuth2, new OpenApiSecurityScheme
+            {
+                Name = "Authorization",
+                Type = SecuritySchemeType.ApiKey,
+                In = ParameterLocation.Header,
+                Scheme = "Bearer",
+                BearerFormat = "JWT",
+                Description = "Standard Authorization header using the Bearer scheme. Example: \"bearer {token}\""
+            });
+        }
+
+        private void AddClientCredentialsSecurityFlowDefinition(SwaggerGenOptions options, IDictionary<string, string> scopes)
+        {
+            options.AddSecurityDefinition(OAuth2Security.ClientCredentials, new OpenApiSecurityScheme
+            {
+                Type = SecuritySchemeType.OAuth2,
+                Flows = new OpenApiOAuthFlows
                 {
-                    Type = SecuritySchemeType.OAuth2,
-                    Flows = new OpenApiOAuthFlows
+                    ClientCredentials = new OpenApiOAuthFlow
                     {
-                        AuthorizationCode = new OpenApiOAuthFlow
-                        {
-                            AuthorizationUrl = new Uri(config.AuthorizeEndpointUrl),
-                            TokenUrl = new Uri(config.TokenEndpointUrl),
-                            Scopes = scopes
-                        }
+                        TokenUrl = new Uri(Options.TokenEndpointUrl),
+                        Scopes = scopes
                     }
-                });
+                }
+            });
+        }
 
-                options.AddSecurityDefinition(OAuth2Security.Implicit, new OpenApiSecurityScheme
-                {
-                    Type = SecuritySchemeType.OAuth2,
-                    Flows = new OpenApiOAuthFlows
-                    {
-                        Implicit = new OpenApiOAuthFlow
-                        {
-                            AuthorizationUrl = new Uri(config.AuthorizeEndpointUrl),
-                            Scopes = scopes
-                        }
-                    }
-                });
-
-                options.AddSecurityDefinition(OAuth2Security.ResourceOwnerPasswordCredentials, new OpenApiSecurityScheme
+        private void AddResourceOwnerFlowSecurityDefinition(SwaggerGenOptions options, IDictionary<string, string> scopes)
+        {
+            options.AddSecurityDefinition(OAuth2Security.ResourceOwnerPasswordCredentials,
+                new OpenApiSecurityScheme
                 {
                     Type = SecuritySchemeType.OAuth2,
                     Flows = new OpenApiOAuthFlows
                     {
                         Password = new OpenApiOAuthFlow
                         {
-                            AuthorizationUrl = new Uri(config.AuthorizeEndpointUrl),
-                            TokenUrl = new Uri(config.TokenEndpointUrl),
+                            AuthorizationUrl = new Uri(Options.AuthorizeEndpointUrl),
+                            TokenUrl = new Uri(Options.TokenEndpointUrl),
                             Scopes = scopes
                         },
                     }
                 });
+        }
 
-                options.AddSecurityDefinition(OAuth2Security.ClientCredentials, new OpenApiSecurityScheme
+        private void AddImplicitFlowSecurityDefinition(SwaggerGenOptions options, IDictionary<string, string> scopes)
+        {
+            options.AddSecurityDefinition(OAuth2Security.Implicit, new OpenApiSecurityScheme
+            {
+                Type = SecuritySchemeType.OAuth2,
+                Flows = new OpenApiOAuthFlows
                 {
-                    Type = SecuritySchemeType.OAuth2,
-                    Flows = new OpenApiOAuthFlows
+                    Implicit = new OpenApiOAuthFlow
                     {
-                        ClientCredentials = new OpenApiOAuthFlow
-                        {
-                            TokenUrl = new Uri(config.TokenEndpointUrl),
-                            Scopes = scopes
-                        }
+                        AuthorizationUrl = new Uri(Options.AuthorizeEndpointUrl),
+                        Scopes = scopes
                     }
-                });
-
-                options.SwaggerDoc("v1", new OpenApiInfo { Title = "ReviewItEasy API", Version = "v1" });
-
-                options.EnableAnnotations();
-
-                options.OperationFilter<AuthorizeCheckOperationFilter>();
+                }
             });
         }
 
-        public ISwaggerConfiguration GetSwaggerConfiguration()
+        private void AddAuthorizationCodeSecurityDefinition(SwaggerGenOptions options, IDictionary<string, string> scopes)
         {
-            var identityConfiguration = new SwaggerConfiguration();
-
-            Configuration.Bind("SwaggerConfiguration", identityConfiguration);
-
-            return identityConfiguration;
+            options.AddSecurityDefinition(OAuth2Security.AuthorizationCode, new OpenApiSecurityScheme
+            {
+                Type = SecuritySchemeType.OAuth2,
+                Flows = new OpenApiOAuthFlows
+                {
+                    AuthorizationCode = new OpenApiOAuthFlow
+                    {
+                        AuthorizationUrl = new Uri(Options.AuthorizeEndpointUrl),
+                        TokenUrl = new Uri(Options.TokenEndpointUrl),
+                        Scopes = scopes
+                    }
+                }
+            });
         }
     }
 }
