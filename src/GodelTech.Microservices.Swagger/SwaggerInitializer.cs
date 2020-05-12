@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using GodelTech.Microservices.Core;
-using GodelTech.Microservices.Core.Mvc;
 using GodelTech.Microservices.Swagger.Configuration;
 using GodelTech.Microservices.Swagger.Swagger;
 using Microsoft.AspNetCore.Builder;
