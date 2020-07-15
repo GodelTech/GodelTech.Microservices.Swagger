@@ -10,5 +10,7 @@ namespace GodelTech.Microservices.Swagger.Configuration
 
         public string AuthorizeEndpointUrl { get; set; }
         public string TokenEndpointUrl { get; set; }
+
+        public string XmlCommentsFilePath { get; set; }
     }
 }

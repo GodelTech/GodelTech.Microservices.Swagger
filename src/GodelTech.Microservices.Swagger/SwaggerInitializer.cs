@@ -67,6 +67,9 @@ namespace GodelTech.Microservices.Swagger
 
                 options.EnableAnnotations();
                 options.OperationFilter<AuthorizeCheckOperationFilter>();
+
+                if (!string.IsNullOrEmpty(Options.XmlCommentsFilePath))
+                    options.IncludeXmlComments(Options.XmlCommentsFilePath, true);
             });
         }
 
