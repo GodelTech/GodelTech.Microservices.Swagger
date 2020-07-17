@@ -1,7 +1,11 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using FluentAssertions;
+using GodelTech.Microservices.Core;
+using GodelTech.Microservices.Swagger.Configuration;
 using GodelTech.Microservices.Swagger.Tests.Utils;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
 
 namespace GodelTech.Microservices.Swagger.Tests
@@ -10,20 +14,55 @@ namespace GodelTech.Microservices.Swagger.Tests
     public class SwaggerInitializerTests : InMemoryServerTest
     {
         [Test]
-        public void WhenDefaultConfigurationUser_Should_ReturnSwaggerUiAtDefaultAddress()
+        public void WhenDefaultConfiguration_Should_ReturnSwaggerUiAtDefaultAddress()
         {
-            UseInMemoryServer(x => new[] { new SwaggerInitializer(x) }, new[] { typeof(RegressionV1Controller) });
+            SetUpInMemoryServer();
 
             Client.GetAsync("/swagger/index.html").GetAwaiter().GetResult().StatusCode.Should().Be(HttpStatusCode.OK);
         }
 
         [Test]
-        public void WhenDefaultConfigurationUser_Should_ReturnSwaggerDocumentAtDefaultAddress()
+        public void WhenDefaultConfiguration_Should_ReturnSwaggerDocumentAtDefaultAddress()
         {
-            UseInMemoryServer(x => new[] { new SwaggerInitializer(x) }, new[] { typeof(RegressionV1Controller) });
+            SetUpInMemoryServer();
 
             Client.GetAsync("/swagger/v1/swagger.json").GetAwaiter().GetResult().StatusCode.Should().Be(HttpStatusCode.OK);
         }
+
+        [Test]
+        public void WhenApiVersionIsNonDefault_Should_ReturnSwaggerDocumentAtAddressContainingApiVersion()
+        {
+            SetUpInMemoryServer(x =>
+            {
+                x.DocumentVersion = "v123";
+            });
+
+            Client.GetAsync("/swagger/v123/swagger.json").GetAwaiter().GetResult().StatusCode.Should().Be(HttpStatusCode.OK);
+        }
+
+        private void SetUpInMemoryServer(Action<SwaggerInitializerOptions> configure = null)
+        {
+            UseInMemoryServer(x =>
+                    new[]
+                    {
+                        CreateSwaggerInitializer(x, configure)
+                    },
+                    new[]
+                    {
+                        typeof(RegressionV1Controller)
+                    });
+        }
+
+        private IMicroserviceInitializer CreateSwaggerInitializer(IConfiguration configuration, Action<SwaggerInitializerOptions> configure)
+        {
+            var initializer = new SwaggerInitializer(configuration);
+
+            configure?.Invoke(initializer.Options);
+
+            return initializer;
+        }
+
+        #region Helper classes
 
         [Route("v1/users")]
         public class RegressionV1Controller : Controller
@@ -34,5 +73,7 @@ namespace GodelTech.Microservices.Swagger.Tests
                 return Ok();
             }
         }
+
+        #endregion
     }
 }
