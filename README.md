@@ -3,7 +3,7 @@
 
 **GodelTech.Microservices.Swagger** project provides initializer which configures Swagger endpoinds and Swagger UI. Default configuration looks as follows:
 
-* Swagger UI can be found at [http://yourwebsite.com/swagger/](http://yourwebsite.com/swagger/)
+* Swagger UI can be found at [http://yourwebsite.com/swagger/index.html](http://yourwebsite.com/swagger/index.html)
 * Swagger document can be found at [http://yourwebsite/swagger/v1/swagger.json](http://yourwebsite/swagger/v1/swagger.json)
   
 Default behavior can be overriden by changing values of intializer's `Options` property or by deriving your customer initializer from `SwaggerInitializer`.

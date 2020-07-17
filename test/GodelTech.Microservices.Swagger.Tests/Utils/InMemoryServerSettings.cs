@@ -13,6 +13,6 @@ namespace GodelTech.Microservices.Swagger.Tests.Utils
         public Type[] ControllerTypes { get; set; } = { };
         public Action<MvcOptions> MvcOptionsConfig { get; set; }
         public Action<IConfiguration, IServiceCollection> ConfigureServices { get; set; }
-        public IEnumerable<IMicroserviceInitializer> Initializers { get; set; } = Enumerable.Empty<IMicroserviceInitializer>();
+        public Func<IConfiguration, IEnumerable<IMicroserviceInitializer>> Initializers { get; set; } = x => Enumerable.Empty<MicroserviceInitializerBase>();
     }
 }

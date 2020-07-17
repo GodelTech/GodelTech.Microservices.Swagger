@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GodelTech.Microservices.Core;
 using GodelTech.Microservices.Core.Mvc;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,7 +13,7 @@ namespace GodelTech.Microservices.Swagger.Tests.Utils
     {
         private InMemoryServerSettings _settings;
 
-        private IEnumerable<IMicroserviceInitializer> _initializers = Enumerable.Empty<IMicroserviceInitializer>();
+        private Func<IConfiguration, IEnumerable<IMicroserviceInitializer>> _initializers = x => Enumerable.Empty<IMicroserviceInitializer>();
 
         public InMemoryDefaultStartup()
             : base(CreateConfiguration())
@@ -29,7 +31,9 @@ namespace GodelTech.Microservices.Swagger.Tests.Utils
 
         protected override IEnumerable<IMicroserviceInitializer> CreateInitializers()
         {
-            foreach (var initializer in _initializers ?? Enumerable.Empty<IMicroserviceInitializer>())
+            yield return new GenericInitializer((app, env) => app.UseRouting());
+
+            foreach (var initializer in _initializers(Configuration))
             {
                 yield return initializer;
             }

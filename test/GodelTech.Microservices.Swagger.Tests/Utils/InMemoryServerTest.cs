@@ -14,24 +14,23 @@ using NUnit.Framework;
 namespace GodelTech.Microservices.Swagger.Tests.Utils
 {
     [TestFixture]
-    public abstract class BaseInMemoryServerTest
+    public abstract class InMemoryServerTest
     {
         protected HttpClient Client;
         private TestServer _server;
 
         protected void UseInMemoryServer(
-            IMicroserviceInitializer[] initializers,
+            Func<IConfiguration, IEnumerable<IMicroserviceInitializer>> initializerProvider,
             Type[] controllerTypes,
             Action<MvcOptions> configFunc = null,
             Action<IConfiguration, IServiceCollection> configureServices = null)
         {
             var host = new HostBuilder()
-                //.UseServiceProviderFactory(new AutofacServiceProviderFactory())
                 .ConfigureWebHost(webBuilder => {
                     webBuilder
                         .UseTestServer()
                         .ConfigureTestServices(x =>
-                            RegisterSettings(x, controllerTypes, configFunc, configureServices, initializers))
+                            RegisterSettings(x, controllerTypes, configFunc, configureServices, initializerProvider))
                         .UseStartup<InMemoryDefaultStartup>();
                 }).Start();
 
@@ -52,7 +51,7 @@ namespace GodelTech.Microservices.Swagger.Tests.Utils
             Type[] controllerTypes,
             Action<MvcOptions> configFunc,
             Action<IConfiguration, IServiceCollection> configureServices,
-            IEnumerable<IMicroserviceInitializer> initializers)
+            Func<IConfiguration, IEnumerable<IMicroserviceInitializer>> initializers)
         {
             var settings = new InMemoryServerSettings
             {
