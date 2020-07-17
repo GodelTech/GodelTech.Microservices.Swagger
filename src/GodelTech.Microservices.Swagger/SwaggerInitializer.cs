@@ -70,7 +70,6 @@ namespace GodelTech.Microservices.Swagger
             if (!string.IsNullOrWhiteSpace(Options.AuthorizeEndpointUrl))
                 options.AddImplicitFlowSecurityDefinition(Options);
 
-
             if (!string.IsNullOrWhiteSpace(Options.AuthorizeEndpointUrl) &&
                 !string.IsNullOrWhiteSpace(Options.TokenEndpointUrl))
                 options.AddResourceOwnerFlowSecurityDefinition(Options);
