@@ -15,15 +15,18 @@ namespace GodelTech.Microservices.Swagger
             if (options == null) 
                 throw new ArgumentNullException(nameof(options));
 
-            options.AddSecurityDefinition(OAuth2Security.OAuth2, new OpenApiSecurityScheme
-            {
-                Name = "Authorization",
-                Type = SecuritySchemeType.ApiKey,
-                In = ParameterLocation.Header,
-                Scheme = "Bearer",
-                BearerFormat = "JWT",
-                Description = "Standard Authorization header using the Bearer scheme. Example: \"bearer {token}\""
-            });
+            options.AddSecurityDefinition(
+                OAuth2Security.OAuth2,
+                new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey,
+                    In = ParameterLocation.Header,
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                    Description = "Standard Authorization header using the Bearer scheme. Example: \"bearer {token}\""
+                }
+            );
         }
 
         public static void AddAuthorizationCodeSecurityDefinition(this SwaggerGenOptions options, SwaggerInitializerOptions initializerOptions)
@@ -39,19 +42,22 @@ namespace GodelTech.Microservices.Swagger
             if (initializerOptions.SupportedScopes == null)
                 throw new ArgumentException("Value can't be empty or null", nameof(initializerOptions.SupportedScopes));
 
-            options.AddSecurityDefinition(OAuth2Security.AuthorizationCode, new OpenApiSecurityScheme
-            {
-                Type = SecuritySchemeType.OAuth2,
-                Flows = new OpenApiOAuthFlows
+            options.AddSecurityDefinition(
+                OAuth2Security.AuthorizationCode,
+                new OpenApiSecurityScheme
                 {
-                    AuthorizationCode = new OpenApiOAuthFlow
+                    Type = SecuritySchemeType.OAuth2,
+                    Flows = new OpenApiOAuthFlows
                     {
-                        AuthorizationUrl = new Uri(initializerOptions.AuthorizeEndpointUrl),
-                        TokenUrl = new Uri(initializerOptions.TokenEndpointUrl),
-                        Scopes = initializerOptions.SupportedScopes.ToDictionary(x => x.Name, x => x.Description)
+                        AuthorizationCode = new OpenApiOAuthFlow
+                        {
+                            AuthorizationUrl = new Uri(initializerOptions.AuthorizeEndpointUrl),
+                            TokenUrl = new Uri(initializerOptions.TokenEndpointUrl),
+                            Scopes = initializerOptions.SupportedScopes.ToDictionary(x => x.Name, x => x.Description)
+                        }
                     }
                 }
-            });
+            );
         }
 
         public static void AddClientCredentialsSecurityFlowDefinition(this SwaggerGenOptions options, SwaggerInitializerOptions initializerOptions)
@@ -65,18 +71,21 @@ namespace GodelTech.Microservices.Swagger
             if (initializerOptions.SupportedScopes == null)
                 throw new ArgumentException("Value can't be empty or null", nameof(initializerOptions.SupportedScopes));
 
-            options.AddSecurityDefinition(OAuth2Security.ClientCredentials, new OpenApiSecurityScheme
-            {
-                Type = SecuritySchemeType.OAuth2,
-                Flows = new OpenApiOAuthFlows
+            options.AddSecurityDefinition(
+                OAuth2Security.ClientCredentials,
+                new OpenApiSecurityScheme
                 {
-                    ClientCredentials = new OpenApiOAuthFlow
+                    Type = SecuritySchemeType.OAuth2,
+                    Flows = new OpenApiOAuthFlows
                     {
-                        TokenUrl = new Uri(initializerOptions.TokenEndpointUrl),
-                        Scopes = initializerOptions.SupportedScopes.ToDictionary(x => x.Name, x => x.Description)
+                        ClientCredentials = new OpenApiOAuthFlow
+                        {
+                            TokenUrl = new Uri(initializerOptions.TokenEndpointUrl),
+                            Scopes = initializerOptions.SupportedScopes.ToDictionary(x => x.Name, x => x.Description)
+                        }
                     }
                 }
-            });
+            );
         }
 
         public static void AddResourceOwnerFlowSecurityDefinition(this SwaggerGenOptions options, SwaggerInitializerOptions initializerOptions)
@@ -92,7 +101,8 @@ namespace GodelTech.Microservices.Swagger
             if (initializerOptions.SupportedScopes == null)
                 throw new ArgumentException("Value can't be empty or null", nameof(initializerOptions.SupportedScopes));
 
-            options.AddSecurityDefinition(OAuth2Security.ResourceOwnerPasswordCredentials,
+            options.AddSecurityDefinition(
+                OAuth2Security.ResourceOwnerPasswordCredentials,
                 new OpenApiSecurityScheme
                 {
                     Type = SecuritySchemeType.OAuth2,
@@ -105,7 +115,8 @@ namespace GodelTech.Microservices.Swagger
                             Scopes = initializerOptions.SupportedScopes.ToDictionary(x => x.Name, x => x.Description)
                         },
                     }
-                });
+                }
+            );
         }
 
         public static void AddImplicitFlowSecurityDefinition(this SwaggerGenOptions options, SwaggerInitializerOptions initializerOptions)
@@ -119,18 +130,21 @@ namespace GodelTech.Microservices.Swagger
             if (initializerOptions.SupportedScopes == null)
                 throw new ArgumentException("Value can't be empty or null", nameof(initializerOptions.SupportedScopes));
 
-            options.AddSecurityDefinition(OAuth2Security.Implicit, new OpenApiSecurityScheme
-            {
-                Type = SecuritySchemeType.OAuth2,
-                Flows = new OpenApiOAuthFlows
+            options.AddSecurityDefinition(
+                OAuth2Security.Implicit,
+                new OpenApiSecurityScheme
                 {
-                    Implicit = new OpenApiOAuthFlow
+                    Type = SecuritySchemeType.OAuth2,
+                    Flows = new OpenApiOAuthFlows
                     {
-                        AuthorizationUrl = new Uri(initializerOptions.AuthorizeEndpointUrl),
-                        Scopes = initializerOptions.SupportedScopes.ToDictionary(x => x.Name, x => x.Description)
+                        Implicit = new OpenApiOAuthFlow
+                        {
+                            AuthorizationUrl = new Uri(initializerOptions.AuthorizeEndpointUrl),
+                            Scopes = initializerOptions.SupportedScopes.ToDictionary(x => x.Name, x => x.Description)
+                        }
                     }
                 }
-            });
+            );
         }
     }
 }

@@ -1,6 +1,7 @@
-﻿using System;
+﻿using GodelTech.Microservices.Swagger.Configuration;
+using System;
 
-namespace GodelTech.Microservices.Swagger.Configuration
+namespace GodelTech.Microservices.Swagger
 {
     public sealed class SwaggerInitializerOptions
     {
