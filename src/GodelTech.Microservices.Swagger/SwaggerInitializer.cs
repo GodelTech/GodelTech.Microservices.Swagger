@@ -26,6 +26,15 @@ namespace GodelTech.Microservices.Swagger
         public SwaggerInitializer(IConfiguration configuration)
             : base(configuration)
         {
+
+        }
+
+        public override void ConfigureServices(IServiceCollection services)
+        {
+            if (services == null)
+                throw new ArgumentNullException(nameof(services));
+
+            services.AddSwaggerGen(ConfigureSwaggerGenOptions);
         }
 
         public override void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -39,14 +48,6 @@ namespace GodelTech.Microservices.Swagger
             // Default address http://localhost:5000/swagger/
             app.UseSwagger(ConfigureSwaggerOptions);
             app.UseSwaggerUI(ConfigureSwaggerUiOptions);
-        }
-
-        public override void ConfigureServices(IServiceCollection services)
-        {
-            if (services == null) 
-                throw new ArgumentNullException(nameof(services));
-
-            services.AddSwaggerGen(ConfigureSwaggerGenOptions);
         }
 
         protected virtual void ConfigureSwaggerOptions(SwaggerOptions options)
@@ -77,11 +78,14 @@ namespace GodelTech.Microservices.Swagger
             if (!string.IsNullOrWhiteSpace(Options.TokenEndpointUrl))
                 options.AddClientCredentialsSecurityFlowDefinition(Options);
 
-            options.SwaggerDoc(Options.DocumentVersion, new OpenApiInfo
-            {
-                Title = Options.DocumentTitle,
-                Version = Options.DocumentVersion
-            });
+            options.SwaggerDoc(
+                Options.DocumentVersion,
+                new OpenApiInfo
+                {
+                    Title = Options.DocumentTitle,
+                    Version = Options.DocumentVersion
+                }
+            );
 
             options.EnableAnnotations();
             options.OperationFilter<AuthorizeCheckOperationFilter>();

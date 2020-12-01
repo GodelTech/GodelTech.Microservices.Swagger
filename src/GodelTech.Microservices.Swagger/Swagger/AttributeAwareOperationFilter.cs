@@ -18,6 +18,7 @@ namespace GodelTech.Microservices.Swagger.Swagger
         protected static IEnumerable<T> GetControllerAttributes<T>(ApiDescription apiDescription) where T : Attribute
         {
             var controller = GetControllerType(apiDescription);
+
             return CustomAttributeExtensions.GetCustomAttributes(controller.GetTypeInfo(), typeof(T), false).Cast<T>();
         }
 
@@ -29,6 +30,7 @@ namespace GodelTech.Microservices.Swagger.Swagger
         protected static IEnumerable<T> GetMethodAttributes<T>(ApiDescription apiDescription) where T : Attribute
         {
             var method = AsControllerDescriptor(apiDescription.ActionDescriptor).MethodInfo;
+
             return CustomAttributeExtensions.GetCustomAttributes(method, typeof(T), false).Cast<T>();
         }
 
