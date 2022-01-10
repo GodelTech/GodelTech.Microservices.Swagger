@@ -37,4 +37,10 @@
 		<ProjectReference Include="..\..\src\GodelTech.Microservices.Swagger\GodelTech.Microservices.Swagger.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <None Update="expectedSwaggerDoc.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
 </Project>
