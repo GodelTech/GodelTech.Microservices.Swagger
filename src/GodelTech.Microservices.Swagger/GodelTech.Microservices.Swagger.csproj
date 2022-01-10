@@ -1,39 +1,42 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+	<PropertyGroup>
+		<TargetFramework>netcoreapp3.1</TargetFramework>
+		<PackageId>GodelTech.Microservices.Swagger</PackageId>
+		<VersionPrefix>2.0.0</VersionPrefix>
+		<Authors>Andrei Salanoi</Authors>
+		<Company>Godel Technologies</Company>
+		<Description>Library provides initializer which configures Swagger endpoinds and Swagger UI.</Description>
+		<Copyright>Godel Technologies 2020</Copyright>
+		<PackageLicenseUrl>https://github.com/GodelTech/GodelTech.Microservices.Swagger/blob/master/LICENSE</PackageLicenseUrl>
+		<PackageProjectUrl>https://github.com/GodelTech/GodelTech.Microservices.Swagger/wiki</PackageProjectUrl>
+		<PackageIconUrl>https://www.gravatar.com/avatar/839234621070de51e7b9cabd5ceee8fe?s=64</PackageIconUrl>
+		<RepositoryUrl>https://github.com/GodelTech/GodelTech.Microservices.Swagger</RepositoryUrl>
+		<PackageTags>dotnet core microservice swagger</PackageTags>
 
-  <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-    <PackageId>GodelTech.Microservices.Swagger</PackageId>
-    <PackageTags>.netcore netcore microservice swagger</PackageTags>
-    <Copyright>Godel Technologies Europe</Copyright>
-    <Product>Microservice Platform</Product>
-    <Company>Godel Technologies Europe</Company>
-    <Authors>Andrei Salanoi</Authors>
-    <RepositoryUrl>https://github.com/GodelTech/GodelTech.Microservices.Swagger</RepositoryUrl>
-    <VersionPrefix>1.3.1</VersionPrefix>
-    <PackageIconUrl>https://www.gravatar.com/avatar/839234621070de51e7b9cabd5ceee8fe?s=64</PackageIconUrl>
-    <!-- SonarQube needs this -->
-    <ProjectGuid>{00000000-0000-0000-0000-000000000001}</ProjectGuid>
+		<AnalysisMode>AllEnabledByDefault</AnalysisMode>
+		
+		<!-- XML documentation -->
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 
-    <!-- XML documentation -->
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<!-- Source Link needs this -->
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<EmbedUntrackedSources>true</EmbedUntrackedSources>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 
-    <!-- Source Link needs this -->
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <EmbedUntrackedSources>true</EmbedUntrackedSources>
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-  </PropertyGroup>
+		<!-- SonarQube needs this -->
+		<ProjectGuid>{00000000-0000-0000-0000-000000000001}</ProjectGuid>
+	</PropertyGroup>
 
-  <ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="GodelTech.Microservices.Core" Version="1.3.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+		<PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="5.6.3" />
 
-    <PackageReference Include="GodelTech.Microservices.Core" Version="1.3.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
-    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="5.6.3" />
-
-    <!-- Source Link needs this -->
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
-  </ItemGroup>
+		<!-- Source Link needs this -->
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+	</ItemGroup>
 
 
 </Project>

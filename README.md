@@ -18,6 +18,7 @@ Simplest usage of swagger initializer may look as follows:
         public Startup(IConfiguration configuration)
             : base(configuration)
         {
+
         }
 
         protected override IEnumerable<IMicroserviceInitializer> CreateInitializers()
@@ -52,15 +53,15 @@ Easiest way to configure initializer is to use properties of `SwaggerInitializer
 | `DocumentVersion` | Version of API exposed by service. Default value is `v1` |
 | `AuthorizeEndpointUrl` | *(Optional)* Identity provider endpoint used by Swagger UI to authorize user. If this value is not defined some OAuth flows might not be available in Swagger UI |
 | `TokenEndpointUrl` | *(Optional)* Identity provider token endpont used by Swagger UI to obtain token used to invoke API endpoints. If this endpoint is not available some OAuth flows might not be available in Swagger UI |
-|`XmlCommentsFilePath`| *(Optional)* Path XML comments provides by project build. This information is used by Swagger generator to provide description of exposed models and properties. |
+| `XmlCommentsFilePath` | *(Optional)* Path XML comments provides by project build. This information is used by Swagger generator to provide description of exposed models and properties. |
 
-Full control over `SwaggerInitializer` can obtained by defined child class. The following protected methods are avaible:
+Full control over `SwaggerInitializer` can be obtained by defined child class. The following protected methods are avaible:
 
 | Method | Description |
 |---|---|
-|`ConfigureSwaggerOptions`|This method is passed as parameter to `app.UseSwagger()`. This method configures location of Swagger document uri. |
-|`ConfigureSwaggerUiOptions`| This method is passed as parameter to `app.UseSwaggerUI()`. This method configures route used by Swagger endpoint. |
-|`ConfigureSwaggerGenOptions`| This method is passed as parameter to `services.AddSwaggerGen()`. It configures security definitions based on values defined in `Options` property. Additionally it adds support of annotations, injects security schemes to endpoint definitions and enables XML comments support.|
+| `ConfigureSwaggerOptions` | This method is passed as parameter to `app.UseSwagger()`. This method configures location of Swagger document uri. |
+| `ConfigureSwaggerUiOptions` | This method is passed as parameter to `app.UseSwaggerUI()`. This method configures route used by Swagger endpoint. |
+| `ConfigureSwaggerGenOptions` | This method is passed as parameter to `services.AddSwaggerGen()`. It configures security definitions based on values defined in `Options` property. Additionally it adds support of annotations, injects security schemes to endpoint definitions and enables XML comments support. |
 
 ## Links
 
