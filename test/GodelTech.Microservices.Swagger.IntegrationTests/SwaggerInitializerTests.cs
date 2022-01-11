@@ -81,13 +81,12 @@
 using System;
 using System.IO;
 using System.Net.Http;
-using System.Text.Json;
 using System.Threading.Tasks;
 using GodelTech.Microservices.Core;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using System.Text.RegularExpressions;
+using Newtonsoft.Json.Linq;
 using Xunit;
 
 namespace GodelTech.Microservices.Swagger.IntegrationTests
@@ -126,8 +125,7 @@ namespace GodelTech.Microservices.Swagger.IntegrationTests
                             .Configure(
                                 (context, app) =>
                                 {
-                                    initializer.Configure(app,
-                                        context.HostingEnvironment);
+                                    initializer.Configure(app, context.HostingEnvironment);
 
                                     app.UseRouting();
 
@@ -162,18 +160,18 @@ namespace GodelTech.Microservices.Swagger.IntegrationTests
                 )
             );
 
-            var actualSwaggerDoc = await result.Content.ReadAsStringAsync();
-            var expectedSwaggerDoc = await 
-                File.ReadAllTextAsync("expectedSwaggerDoc.json");
+            var actualSwaggerDoc = JObject.Parse(await result.Content.ReadAsStringAsync());
+            var expectedSwaggerDoc = JObject.Parse(
+                await File.ReadAllTextAsync("expectedSwaggerDoc.json")
+            );
 
             // Assert
-            Assert.Matches(
+            Assert.True(JToken.DeepEquals(actualSwaggerDoc, expectedSwaggerDoc));
+            /*Assert.Matches(
                 new Regex(
-                    "^" +
-                    await File.ReadAllTextAsync("expectedSwaggerDoc.json") +
-                    "$"),
+                          await File.ReadAllTextAsync("expectedSwaggerDoc.json"), RegexOptions.Multiline | RegexOptions.Singleline),
                     actualSwaggerDoc
-            );
+            );*/
 
         }
     }
