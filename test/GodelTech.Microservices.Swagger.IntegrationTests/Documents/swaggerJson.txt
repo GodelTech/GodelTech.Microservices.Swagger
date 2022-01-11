@@ -1,4 +1,4 @@
-{
+﻿{
   "openapi": "3.0.1",
   "info": {
     "title": "API",
@@ -49,11 +49,11 @@
         },
         "security": [
           {
-            "oauth2": [],
-            "oauth2-authorization-code": [],
-            "oauth2-implicit": [],
-            "oauth2-client-credentials": [],
-            "oauth2-password": []
+            "oauth2": [ ],
+            "oauth2-authorization-code": [ ],
+            "oauth2-implicit": [ ],
+            "oauth2-client-credentials": [ ],
+            "oauth2-password": [ ]
           }
         ]
       },
@@ -110,11 +110,11 @@
         },
         "security": [
           {
-            "oauth2": [],
-            "oauth2-authorization-code": [],
-            "oauth2-implicit": [],
-            "oauth2-client-credentials": [],
-            "oauth2-password": []
+            "oauth2": [ ],
+            "oauth2-authorization-code": [ ],
+            "oauth2-implicit": [ ],
+            "oauth2-client-credentials": [ ],
+            "oauth2-password": [ ]
           }
         ]
       }
@@ -185,11 +185,11 @@
         },
         "security": [
           {
-            "oauth2": [],
-            "oauth2-authorization-code": [],
-            "oauth2-implicit": [],
-            "oauth2-client-credentials": [],
-            "oauth2-password": []
+            "oauth2": [ ],
+            "oauth2-authorization-code": [ ],
+            "oauth2-implicit": [ ],
+            "oauth2-client-credentials": [ ],
+            "oauth2-password": [ ]
           }
         ]
       },
@@ -280,11 +280,11 @@
         },
         "security": [
           {
-            "oauth2": [],
-            "oauth2-authorization-code": [],
-            "oauth2-implicit": [],
-            "oauth2-client-credentials": [],
-            "oauth2-password": []
+            "oauth2": [ ],
+            "oauth2-authorization-code": [ ],
+            "oauth2-implicit": [ ],
+            "oauth2-client-credentials": [ ],
+            "oauth2-password": [ ]
           }
         ]
       },
@@ -336,11 +336,11 @@
         },
         "security": [
           {
-            "oauth2": [],
-            "oauth2-authorization-code": [],
-            "oauth2-implicit": [],
-            "oauth2-client-credentials": [],
-            "oauth2-password": []
+            "oauth2": [ ],
+            "oauth2-authorization-code": [ ],
+            "oauth2-implicit": [ ],
+            "oauth2-client-credentials": [ ],
+            "oauth2-password": [ ]
           }
         ]
       }
@@ -411,7 +411,7 @@
             "nullable": true
           }
         },
-        "additionalProperties": {}
+        "additionalProperties": { }
       }
     },
     "securitySchemes": {
