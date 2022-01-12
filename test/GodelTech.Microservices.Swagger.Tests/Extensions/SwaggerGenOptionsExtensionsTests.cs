@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using GodelTech.Microservices.Swagger.Extensions;
+using GodelTech.Microservices.Swagger.Swagger;
 using GodelTech.Microservices.Swagger.Tests.Fakes;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -30,7 +32,7 @@ namespace GodelTech.Microservices.Swagger.Tests.Extensions
 
             // Assert
             var securityScheme = Assert.Contains(
-                "oauth2",
+                OAuth2Security.OAuth2,
                 options.SwaggerGeneratorOptions.SecuritySchemes
             );
 
@@ -120,6 +122,47 @@ namespace GodelTech.Microservices.Swagger.Tests.Extensions
                     )
             );
             Assert.Equal("Scopes can't be null", exception.Message);
+        }
+
+        [Fact]
+        public void AddAuthorizationCodeFlowSecurityDefinition_Success()
+        {
+            // Arrange
+            var options = new SwaggerGenOptions();
+            var initializerOptions = new SwaggerInitializerOptions
+            {
+                AuthorizationUrl = new Uri("http://test.dev"),
+                TokenUrl = new Uri("http://test.dev"),
+                Scopes = new Dictionary<string, string>
+                {
+                    {"TestScopeKey", "TestScopeValue"}
+                }
+            };
+
+            var expectedOpenApiSecurityScheme = new OpenApiSecurityScheme
+            {
+                Type = SecuritySchemeType.OAuth2,
+                Flows = new OpenApiOAuthFlows
+                {
+                    AuthorizationCode = new OpenApiOAuthFlow
+                    {
+                        AuthorizationUrl = initializerOptions.AuthorizationUrl,
+                        TokenUrl = initializerOptions.TokenUrl,
+                        Scopes = initializerOptions.Scopes
+                    }
+                }
+            };
+
+            // Act
+            options.AddAuthorizationCodeFlowSecurityDefinition(initializerOptions);
+
+            // Assert
+            var securityScheme = Assert.Contains(
+                OAuth2Security.AuthorizationCode,
+                options.SwaggerGeneratorOptions.SecuritySchemes
+            );
+
+            Assert.Equal(expectedOpenApiSecurityScheme, securityScheme, new OpenApiSecuritySchemeComparer());
         }
 
         #endregion
