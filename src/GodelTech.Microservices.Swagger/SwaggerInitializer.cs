@@ -1,6 +1,5 @@
 ﻿using System;
 using GodelTech.Microservices.Core;
-using GodelTech.Microservices.Swagger.Configuration;
 using GodelTech.Microservices.Swagger.Swagger;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -51,31 +50,42 @@ namespace GodelTech.Microservices.Swagger
             // todo: check what options need to be changed
             options.AddGenericAuthHeaderFlowSecurityDefinition();
 
-            if (!string.IsNullOrWhiteSpace(_options.AuthorizeEndpointUrl) &&
-                !string.IsNullOrWhiteSpace(_options.TokenEndpointUrl))
-                options.AddAuthorizationCodeSecurityDefinition(_options);
-
-            if (!string.IsNullOrWhiteSpace(_options.AuthorizeEndpointUrl))
-                options.AddImplicitFlowSecurityDefinition(_options);
-
-            if (!string.IsNullOrWhiteSpace(_options.AuthorizeEndpointUrl) &&
-                !string.IsNullOrWhiteSpace(_options.TokenEndpointUrl))
-                options.AddResourceOwnerFlowSecurityDefinition(_options);
-
-            if (!string.IsNullOrWhiteSpace(_options.TokenEndpointUrl))
-                options.AddClientCredentialsSecurityFlowDefinition(_options);
-
-            options.SwaggerDoc(_options.DocumentVersion, new OpenApiInfo
+            if (_options.AuthorizationUrl != null && _options.TokenUrl != null)
             {
-                Title = _options.DocumentTitle,
-                Version = _options.DocumentVersion
-            });
+                options.AddAuthorizationCodeSecurityDefinition(_options);
+            }
+
+            if (_options.AuthorizationUrl != null)
+            {
+                options.AddImplicitFlowSecurityDefinition(_options);
+            }
+
+            if (_options.AuthorizationUrl != null && _options.TokenUrl != null)
+            {
+                options.AddResourceOwnerFlowSecurityDefinition(_options);
+            }
+
+            if (_options.TokenUrl != null)
+            {
+                options.AddClientCredentialsSecurityFlowDefinition(_options);
+            }
+
+            options.SwaggerDoc(
+                _options.DocumentVersion,
+                new OpenApiInfo
+                {
+                    Title = _options.DocumentTitle,
+                    Version = _options.DocumentVersion
+                }
+            );
 
             options.EnableAnnotations();
             options.OperationFilter<AuthorizeCheckOperationFilter>();
 
             if (!string.IsNullOrWhiteSpace(_options.XmlCommentsFilePath))
+            {
                 options.IncludeXmlComments(_options.XmlCommentsFilePath, true);
+            }
         }
 
         /// <summary>

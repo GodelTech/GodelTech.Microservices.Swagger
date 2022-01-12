@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using GodelTech.Microservices.Swagger.Configuration;
 using GodelTech.Microservices.Swagger.Swagger;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
@@ -12,8 +10,7 @@ namespace GodelTech.Microservices.Swagger
     {
         public static void AddGenericAuthHeaderFlowSecurityDefinition(this SwaggerGenOptions options)
         {
-            if (options == null) 
-                throw new ArgumentNullException(nameof(options));
+            if (options == null) throw new ArgumentNullException(nameof(options));
 
             options.AddSecurityDefinition(OAuth2Security.OAuth2, new OpenApiSecurityScheme
             {
@@ -32,12 +29,12 @@ namespace GodelTech.Microservices.Swagger
                 throw new ArgumentNullException(nameof(options));
             if (initializerOptions == null) 
                 throw new ArgumentNullException(nameof(initializerOptions));
-            if (string.IsNullOrWhiteSpace(initializerOptions.AuthorizeEndpointUrl))
-                throw new ArgumentException("Value can't be empty or null", nameof(initializerOptions.AuthorizeEndpointUrl));
-            if (string.IsNullOrWhiteSpace(initializerOptions.TokenEndpointUrl))
-                throw new ArgumentException("Value can't be empty or null", nameof(initializerOptions.TokenEndpointUrl));
-            if (initializerOptions.SupportedScopes == null)
-                throw new ArgumentException("Value can't be empty or null", nameof(initializerOptions.SupportedScopes));
+            if (initializerOptions.AuthorizationUrl == null)
+                throw new ArgumentException("Value can't be empty or null", nameof(initializerOptions.AuthorizationUrl));
+            if (initializerOptions.TokenUrl == null)
+                throw new ArgumentException("Value can't be empty or null", nameof(initializerOptions.TokenUrl));
+            if (initializerOptions.Scopes == null)
+                throw new ArgumentException("Value can't be empty or null", nameof(initializerOptions.Scopes));
 
             options.AddSecurityDefinition(OAuth2Security.AuthorizationCode, new OpenApiSecurityScheme
             {
@@ -46,9 +43,9 @@ namespace GodelTech.Microservices.Swagger
                 {
                     AuthorizationCode = new OpenApiOAuthFlow
                     {
-                        AuthorizationUrl = new Uri(initializerOptions.AuthorizeEndpointUrl),
-                        TokenUrl = new Uri(initializerOptions.TokenEndpointUrl),
-                        Scopes = initializerOptions.SupportedScopes.ToDictionary(x => x.Name, x => x.Description)
+                        AuthorizationUrl = initializerOptions.AuthorizationUrl,
+                        TokenUrl = initializerOptions.TokenUrl,
+                        Scopes = initializerOptions.Scopes
                     }
                 }
             });
@@ -60,10 +57,10 @@ namespace GodelTech.Microservices.Swagger
                 throw new ArgumentNullException(nameof(options));
             if (initializerOptions == null)
                 throw new ArgumentNullException(nameof(initializerOptions));
-            if (string.IsNullOrWhiteSpace(initializerOptions.TokenEndpointUrl))
-                throw new ArgumentException("Value can't be empty or null", nameof(initializerOptions.TokenEndpointUrl));
-            if (initializerOptions.SupportedScopes == null)
-                throw new ArgumentException("Value can't be empty or null", nameof(initializerOptions.SupportedScopes));
+            if (initializerOptions.TokenUrl == null)
+                throw new ArgumentException("Value can't be empty or null", nameof(initializerOptions.TokenUrl));
+            if (initializerOptions.Scopes == null)
+                throw new ArgumentException("Value can't be empty or null", nameof(initializerOptions.Scopes));
 
             options.AddSecurityDefinition(OAuth2Security.ClientCredentials, new OpenApiSecurityScheme
             {
@@ -72,8 +69,8 @@ namespace GodelTech.Microservices.Swagger
                 {
                     ClientCredentials = new OpenApiOAuthFlow
                     {
-                        TokenUrl = new Uri(initializerOptions.TokenEndpointUrl),
-                        Scopes = initializerOptions.SupportedScopes.ToDictionary(x => x.Name, x => x.Description)
+                        TokenUrl = initializerOptions.TokenUrl,
+                        Scopes = initializerOptions.Scopes
                     }
                 }
             });
@@ -85,12 +82,12 @@ namespace GodelTech.Microservices.Swagger
                 throw new ArgumentNullException(nameof(options));
             if (initializerOptions == null)
                 throw new ArgumentNullException(nameof(initializerOptions));
-            if (string.IsNullOrWhiteSpace(initializerOptions.AuthorizeEndpointUrl))
-                throw new ArgumentException("Value can't be empty or null", nameof(initializerOptions.AuthorizeEndpointUrl));
-            if (string.IsNullOrWhiteSpace(initializerOptions.TokenEndpointUrl))
-                throw new ArgumentException("Value can't be empty or null", nameof(initializerOptions.TokenEndpointUrl));
-            if (initializerOptions.SupportedScopes == null)
-                throw new ArgumentException("Value can't be empty or null", nameof(initializerOptions.SupportedScopes));
+            if (initializerOptions.AuthorizationUrl == null)
+                throw new ArgumentException("Value can't be empty or null", nameof(initializerOptions.AuthorizationUrl));
+            if (initializerOptions.TokenUrl == null)
+                throw new ArgumentException("Value can't be empty or null", nameof(initializerOptions.TokenUrl));
+            if (initializerOptions.Scopes == null)
+                throw new ArgumentException("Value can't be empty or null", nameof(initializerOptions.Scopes));
 
             options.AddSecurityDefinition(OAuth2Security.ResourceOwnerPasswordCredentials,
                 new OpenApiSecurityScheme
@@ -100,9 +97,9 @@ namespace GodelTech.Microservices.Swagger
                     {
                         Password = new OpenApiOAuthFlow
                         {
-                            AuthorizationUrl = new Uri(initializerOptions.AuthorizeEndpointUrl),
-                            TokenUrl = new Uri(initializerOptions.TokenEndpointUrl),
-                            Scopes = initializerOptions.SupportedScopes.ToDictionary(x => x.Name, x => x.Description)
+                            AuthorizationUrl = initializerOptions.AuthorizationUrl,
+                            TokenUrl = initializerOptions.TokenUrl,
+                            Scopes = initializerOptions.Scopes
                         },
                     }
                 });
@@ -114,10 +111,10 @@ namespace GodelTech.Microservices.Swagger
                 throw new ArgumentNullException(nameof(options));
             if (initializerOptions == null)
                 throw new ArgumentNullException(nameof(initializerOptions));
-            if (string.IsNullOrWhiteSpace(initializerOptions.AuthorizeEndpointUrl))
-                throw new ArgumentException("Value can't be empty or null", nameof(initializerOptions.AuthorizeEndpointUrl));
-            if (initializerOptions.SupportedScopes == null)
-                throw new ArgumentException("Value can't be empty or null", nameof(initializerOptions.SupportedScopes));
+            if (initializerOptions.AuthorizationUrl == null)
+                throw new ArgumentException("Value can't be empty or null", nameof(initializerOptions.AuthorizationUrl));
+            if (initializerOptions.Scopes == null)
+                throw new ArgumentException("Value can't be empty or null", nameof(initializerOptions.Scopes));
 
             options.AddSecurityDefinition(OAuth2Security.Implicit, new OpenApiSecurityScheme
             {
@@ -126,8 +123,8 @@ namespace GodelTech.Microservices.Swagger
                 {
                     Implicit = new OpenApiOAuthFlow
                     {
-                        AuthorizationUrl = new Uri(initializerOptions.AuthorizeEndpointUrl),
-                        Scopes = initializerOptions.SupportedScopes.ToDictionary(x => x.Name, x => x.Description)
+                        AuthorizationUrl = initializerOptions.AuthorizationUrl,
+                        Scopes = initializerOptions.Scopes
                     }
                 }
             });
