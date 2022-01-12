@@ -1,5 +1,6 @@
 ﻿using System;
 using GodelTech.Microservices.Core;
+using GodelTech.Microservices.Swagger.Extensions;
 using GodelTech.Microservices.Swagger.Swagger;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -48,16 +49,16 @@ namespace GodelTech.Microservices.Swagger
         protected virtual void ConfigureSwaggerGenOptions(SwaggerGenOptions options)
         {
             // todo: check what options need to be changed
-            options.AddGenericAuthHeaderFlowSecurityDefinition();
+            options.AddAuthHeaderFlowSecurityDefinition();
 
             if (_options.AuthorizationUrl != null && _options.TokenUrl != null)
             {
-                options.AddAuthorizationCodeSecurityDefinition(_options);
+                options.AddAuthorizationCodeFlowSecurityDefinition(_options);
             }
 
-            if (_options.AuthorizationUrl != null)
+            if (_options.TokenUrl != null)
             {
-                options.AddImplicitFlowSecurityDefinition(_options);
+                options.AddClientCredentialsFlowSecurityDefinition(_options);
             }
 
             if (_options.AuthorizationUrl != null && _options.TokenUrl != null)
@@ -65,9 +66,9 @@ namespace GodelTech.Microservices.Swagger
                 options.AddResourceOwnerFlowSecurityDefinition(_options);
             }
 
-            if (_options.TokenUrl != null)
+            if (_options.AuthorizationUrl != null)
             {
-                options.AddClientCredentialsSecurityFlowDefinition(_options);
+                options.AddImplicitFlowSecurityDefinition(_options);
             }
 
             options.SwaggerDoc(
