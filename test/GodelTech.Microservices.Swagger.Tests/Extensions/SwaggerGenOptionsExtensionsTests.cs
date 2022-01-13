@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using GodelTech.Microservices.Swagger.Extensions;
 using GodelTech.Microservices.Swagger.Swagger;
 using GodelTech.Microservices.Swagger.Tests.Fakes;
+using GodelTech.Microservices.Swagger.Tests.Fakes.Extensions;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Xunit;
@@ -11,11 +12,14 @@ namespace GodelTech.Microservices.Swagger.Tests.Extensions
 {
     public class SwaggerGenOptionsExtensionsTests
     {
+        private const string AuthorizationUrlArgumentExceptionMessage = "AuthorizationUrl can't be null";
+
         [Fact]
         public void AddAuthHeaderFlowSecurityDefinition_Success()
         {
             // Arrange
             var options = new SwaggerGenOptions();
+
             var expectedOpenApiSecurityScheme = new OpenApiSecurityScheme
             {
                 Name = "Authorization",
@@ -23,14 +27,15 @@ namespace GodelTech.Microservices.Swagger.Tests.Extensions
                 In = ParameterLocation.Header,
                 Scheme = "Bearer",
                 BearerFormat = "JWT",
-                Description =
-                    "Standard Authorization header using the Bearer scheme. Example: \"bearer {token}\""
+                Description = "Standard Authorization header using the Bearer scheme. Example: \"bearer {token}\""
             };
 
             // Act
             options.AddAuthHeaderFlowSecurityDefinition();
 
             // Assert
+            Assert.Single(options.SwaggerGeneratorOptions.SecuritySchemes);
+
             var securityScheme = Assert.Contains(
                 OAuth2Security.OAuth2,
                 options.SwaggerGeneratorOptions.SecuritySchemes
@@ -46,40 +51,24 @@ namespace GodelTech.Microservices.Swagger.Tests.Extensions
         #region AddAuthorizationCodeFlowSecurityDefinitionTests
 
         [Fact]
-        public void
-            AddAuthorizationCodeFlowSecurityDefinition_ThrowsArgumentNullException_When_SwaggerInitializerOptionsIsNull()
+        public void AddAuthorizationCodeFlowSecurityDefinition_WhenSwaggerInitializerOptionsIsNull_ThrowsArgumentNullException()
         {
-            // Arrange 
-            var options = new SwaggerGenOptions();
-
-            // Act && Assert
-            var exception = Assert.Throws<ArgumentNullException>(
-                () => options
-                    .AddAuthorizationCodeFlowSecurityDefinition(null)
+            // Arrange & Act & Assert
+            AssertExtensions.ArgumentNullException(
+                options => options.AddAuthorizationCodeFlowSecurityDefinition(null)
             );
-            Assert.Equal("initializerOptions", exception.ParamName);
         }
 
         [Fact]
-        public void
-            AddAuthorizationCodeFlowSecurityDefinition_ThrowsArgumentException_When_AuthorizationUrlIsNull()
+        public void AddAuthorizationCodeFlowSecurityDefinition_WhenSwaggerInitializerOptionsAuthorizationUrlIsNull_ThrowsArgumentException()
         {
-            // Arrange 
-            var options = new SwaggerGenOptions();
-
-            // Act && Assert
-            var exception = Assert.Throws<ArgumentException>(
-                () => options
-                    .AddAuthorizationCodeFlowSecurityDefinition(
-                        new SwaggerInitializerOptions
-                        {
-                            AuthorizationUrl = null
-                        }
-                    )
+            // Arrange & Act & Assert
+            AssertExtensions.ArgumentException(
+                SwaggerInitializerOptionsHelpers.CreateWithNullAuthorizationUrl(),
+                (options, swaggerInitializerOptions) => options.AddAuthorizationCodeFlowSecurityDefinition(swaggerInitializerOptions),
+                AuthorizationUrlArgumentExceptionMessage
             );
-            Assert.Equal("AuthorizationUrl can't be null", exception.Message);
         }
-
 
         [Fact]
         public void
@@ -88,7 +77,7 @@ namespace GodelTech.Microservices.Swagger.Tests.Extensions
             // Arrange 
             var options = new SwaggerGenOptions();
 
-            // Act && Assert
+            // Act & Assert
             var exception = Assert.Throws<ArgumentException>(
                 () => options
                     .AddAuthorizationCodeFlowSecurityDefinition(
@@ -109,7 +98,7 @@ namespace GodelTech.Microservices.Swagger.Tests.Extensions
             // Arrange 
             var options = new SwaggerGenOptions();
 
-            // Act && Assert
+            // Act & Assert
             var exception = Assert.Throws<ArgumentException>(
                 () => options
                     .AddAuthorizationCodeFlowSecurityDefinition(
@@ -176,14 +165,14 @@ namespace GodelTech.Microservices.Swagger.Tests.Extensions
             // Arrange 
             var options = new SwaggerGenOptions();
 
-            // Act && Assert
+            // Act & Assert
             var exception = Assert.Throws<ArgumentNullException>(
                 () => options
                     .AddClientCredentialsFlowSecurityDefinition(null)
             );
             Assert.Equal("initializerOptions", exception.ParamName);
         }
-        
+
         [Fact]
         public void
             AddClientCredentialsFlowSecurityDefinition_ThrowsArgumentException_When_TokenUrlIsNull()
@@ -191,7 +180,7 @@ namespace GodelTech.Microservices.Swagger.Tests.Extensions
             // Arrange 
             var options = new SwaggerGenOptions();
 
-            // Act && Assert
+            // Act & Assert
             var exception = Assert.Throws<ArgumentException>(
                 () => options
                     .AddClientCredentialsFlowSecurityDefinition(
@@ -211,7 +200,7 @@ namespace GodelTech.Microservices.Swagger.Tests.Extensions
             // Arrange 
             var options = new SwaggerGenOptions();
 
-            // Act && Assert
+            // Act & Assert
             var exception = Assert.Throws<ArgumentException>(
                 () => options
                     .AddClientCredentialsFlowSecurityDefinition(
@@ -238,7 +227,7 @@ namespace GodelTech.Microservices.Swagger.Tests.Extensions
             // Arrange 
             var options = new SwaggerGenOptions();
 
-            // Act && Assert
+            // Act & Assert
             var exception = Assert.Throws<ArgumentNullException>(
                 () => options
                     .AddResourceOwnerFlowSecurityDefinition(null)
@@ -253,7 +242,7 @@ namespace GodelTech.Microservices.Swagger.Tests.Extensions
             // Arrange 
             var options = new SwaggerGenOptions();
 
-            // Act && Assert
+            // Act & Assert
             var exception = Assert.Throws<ArgumentException>(
                 () => options
                     .AddResourceOwnerFlowSecurityDefinition(
@@ -273,7 +262,7 @@ namespace GodelTech.Microservices.Swagger.Tests.Extensions
             // Arrange 
             var options = new SwaggerGenOptions();
 
-            // Act && Assert
+            // Act & Assert
             var exception = Assert.Throws<ArgumentException>(
                 () => options
                     .AddResourceOwnerFlowSecurityDefinition(
@@ -294,7 +283,7 @@ namespace GodelTech.Microservices.Swagger.Tests.Extensions
             // Arrange 
             var options = new SwaggerGenOptions();
 
-            // Act && Assert
+            // Act & Assert
             var exception = Assert.Throws<ArgumentException>(
                 () => options
                     .AddResourceOwnerFlowSecurityDefinition(
@@ -320,7 +309,7 @@ namespace GodelTech.Microservices.Swagger.Tests.Extensions
             // Arrange 
             var options = new SwaggerGenOptions();
 
-            // Act && Assert
+            // Act & Assert
             var exception = Assert.Throws<ArgumentNullException>(
                 () => options
                     .AddImplicitFlowSecurityDefinition(null)
@@ -335,7 +324,7 @@ namespace GodelTech.Microservices.Swagger.Tests.Extensions
             // Arrange 
             var options = new SwaggerGenOptions();
 
-            // Act && Assert
+            // Act & Assert
             var exception = Assert.Throws<ArgumentException>(
                 () => options
                     .AddImplicitFlowSecurityDefinition(
@@ -347,7 +336,7 @@ namespace GodelTech.Microservices.Swagger.Tests.Extensions
             );
             Assert.Equal("AuthorizationUrl can't be null", exception.Message);
         }
-        
+
         [Fact]
         public void
             AddImplicitFlowSecurityDefinition_ThrowsArgumentException_When_ScopesIsNull()
@@ -355,7 +344,7 @@ namespace GodelTech.Microservices.Swagger.Tests.Extensions
             // Arrange 
             var options = new SwaggerGenOptions();
 
-            // Act && Assert
+            // Act & Assert
             var exception = Assert.Throws<ArgumentException>(
                 () => options
                     .AddImplicitFlowSecurityDefinition(

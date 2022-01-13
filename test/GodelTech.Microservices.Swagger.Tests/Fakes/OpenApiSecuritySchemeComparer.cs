@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.OpenApi.Models;
 
@@ -25,13 +26,16 @@ namespace GodelTech.Microservices.Swagger.Tests.Fakes
 
         public int GetHashCode([DisallowNull] OpenApiSecurityScheme obj)
         {
+            // Check whether the object is null
+            if (ReferenceEquals(obj, null)) return 0;
+
             // Calculate the hash code for the object.
-            return obj.Name.GetHashCode()
+            return obj.Name.GetHashCode(StringComparison.InvariantCulture)
                    ^ obj.Type.GetHashCode()
                    ^ obj.In.GetHashCode()
-                   ^ obj.Scheme.GetHashCode()
-                   ^ obj.BearerFormat.GetHashCode()
-                   ^ obj.Description.GetHashCode();
+                   ^ obj.Scheme.GetHashCode(StringComparison.InvariantCulture)
+                   ^ obj.BearerFormat.GetHashCode(StringComparison.InvariantCulture)
+                   ^ obj.Description.GetHashCode(StringComparison.InvariantCulture);
         }
     }
 }
