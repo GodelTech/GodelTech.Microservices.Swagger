@@ -6,6 +6,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace GodelTech.Microservices.Swagger.Swagger
 {
+    // todo: http://wmpratt.com/part-ii-swagger-and-asp-net-web-api-enabling-oauth2/
     public class AuthorizeCheckOperationFilter : AttributeAwareOperationFilter, IOperationFilter, IAuthorizeCheckOperationFilter
     {
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
