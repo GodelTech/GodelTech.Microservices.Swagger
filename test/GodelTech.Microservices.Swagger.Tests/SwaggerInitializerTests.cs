@@ -13,7 +13,7 @@ namespace GodelTech.Microservices.Swagger.Tests
         {
             _initializer = new FakeSwaggerInitializer();
         }
-
+        
         [Fact]
         public void ConfigureSwaggerUiOptions_Success()
         {
