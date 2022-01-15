@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using GodelTech.Microservices.Swagger.Tests.Fakes;
+﻿using GodelTech.Microservices.Swagger.Tests.Fakes;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using Xunit;
 
