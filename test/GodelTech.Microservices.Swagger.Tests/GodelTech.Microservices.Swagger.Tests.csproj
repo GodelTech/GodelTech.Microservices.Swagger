@@ -34,4 +34,10 @@
 		<ProjectReference Include="..\..\src\GodelTech.Microservices.Swagger\GodelTech.Microservices.Swagger.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<None Update="Documents\*">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
 </Project>
