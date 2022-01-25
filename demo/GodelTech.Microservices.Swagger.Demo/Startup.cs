@@ -21,8 +21,8 @@ namespace GodelTech.Microservices.Swagger.Demo
             yield return new ExceptionHandlerInitializer();
             yield return new HstsInitializer();
 
-            yield return new GenericInitializer(null, (app, env) => app.UseRouting());
-            yield return new GenericInitializer(null, (app, env) => app.UseAuthentication());
+            yield return new GenericInitializer(null, (app, _) => app.UseRouting());
+            yield return new GenericInitializer(null, (app, _) => app.UseAuthentication());
 
             yield return new SwaggerInitializer(
                 options =>
@@ -33,7 +33,9 @@ namespace GodelTech.Microservices.Swagger.Demo
                     options.TokenUrl = new Uri("http://token.url");
                     options.Scopes = new Dictionary<string, string>
                     {
-                        { "Scope1", "Scope description" }
+                        { "fake.add", "add" },
+                        { "fake.edit", "edit" },
+                        { "fake.delete", "delete" }
                     };
                 }
             );

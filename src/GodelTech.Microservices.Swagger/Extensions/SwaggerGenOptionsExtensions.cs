@@ -1,5 +1,4 @@
 ﻿using System;
-using GodelTech.Microservices.Swagger.Swagger;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;

@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using GodelTech.Microservices.Swagger.IntegrationTests.Fakes.Models.Fake;
+using GodelTech.Microservices.Swagger.Demo.Models.Fake;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 
-namespace GodelTech.Microservices.Swagger.IntegrationTests.Fakes.Controllers
+namespace GodelTech.Microservices.Swagger.Demo.Controllers
 {
     [Authorize]
     [Route("fakes")]

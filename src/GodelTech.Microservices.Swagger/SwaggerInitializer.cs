@@ -1,7 +1,7 @@
 ﻿using System;
 using GodelTech.Microservices.Core;
 using GodelTech.Microservices.Swagger.Extensions;
-using GodelTech.Microservices.Swagger.Swagger;
+using GodelTech.Microservices.Swagger.Filters;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -81,7 +81,7 @@ namespace GodelTech.Microservices.Swagger
             );
 
             options.EnableAnnotations();
-            options.OperationFilter<AuthorizeCheckOperationFilter>();
+            options.OperationFilter<OAuth2OperationFilter>();
 
             if (!string.IsNullOrWhiteSpace(_options.XmlCommentsFilePath))
             {
