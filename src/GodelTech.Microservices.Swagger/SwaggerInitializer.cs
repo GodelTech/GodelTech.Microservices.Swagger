@@ -10,6 +10,7 @@ using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Swashbuckle.AspNetCore.SwaggerUI;
 
+[assembly: CLSCompliant(false)]
 namespace GodelTech.Microservices.Swagger
 {
     /// <summary>
@@ -17,7 +18,6 @@ namespace GodelTech.Microservices.Swagger
     /// </summary>
     public class SwaggerInitializer : IMicroserviceInitializer
     {
-        // todo: think about use directly SwaggerOptions, SwaggerUIOptions, SwaggerGenOptions and OpenApiInfo
         private readonly SwaggerInitializerOptions _options = new SwaggerInitializerOptions();
 
         /// <summary>
@@ -48,7 +48,6 @@ namespace GodelTech.Microservices.Swagger
         /// <param name="options">SwaggerGenOptions.</param>
         protected virtual void ConfigureSwaggerGenOptions(SwaggerGenOptions options)
         {
-            // todo: check what options need to be changed
             options.AddAuthHeaderFlowSecurityDefinition();
 
             if (_options.AuthorizationUrl != null && _options.TokenUrl != null)
@@ -104,7 +103,6 @@ namespace GodelTech.Microservices.Swagger
         /// <param name="options">SwaggerUIOptions.</param>
         protected virtual void ConfigureSwaggerUiOptions(SwaggerUIOptions options)
         {
-            // todo: check what options need to be changed
             options.SwaggerEndpoint($"/swagger/{_options.DocumentVersion}/swagger.json", "v1");
         }
     }

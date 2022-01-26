@@ -5,6 +5,9 @@
 
 		<!-- SonarQube needs this -->
 		<ProjectGuid>{00000000-0000-0000-0000-000000000004}</ProjectGuid>
+
+		<!-- Exclude the project from analysis -->
+		<SonarQubeExclude>true</SonarQubeExclude>
 	</PropertyGroup>
 
 	<ItemGroup>
