@@ -51,9 +51,9 @@
           {
             "oauth2": [ ],
             "oauth2-authorization-code": [ ],
-            "oauth2-implicit": [ ],
             "oauth2-client-credentials": [ ],
-            "oauth2-password": [ ]
+            "oauth2-password": [ ],
+            "oauth2-implicit": [ ]
           }
         ]
       },
@@ -110,11 +110,21 @@
         },
         "security": [
           {
-            "oauth2": [ ],
-            "oauth2-authorization-code": [ ],
-            "oauth2-implicit": [ ],
-            "oauth2-client-credentials": [ ],
-            "oauth2-password": [ ]
+            "oauth2": [
+              "fake.add"
+            ],
+            "oauth2-authorization-code": [
+              "fake.add"
+            ],
+            "oauth2-client-credentials": [
+              "fake.add"
+            ],
+            "oauth2-password": [
+              "fake.add"
+            ],
+            "oauth2-implicit": [
+              "fake.add"
+            ]
           }
         ]
       }
@@ -187,9 +197,9 @@
           {
             "oauth2": [ ],
             "oauth2-authorization-code": [ ],
-            "oauth2-implicit": [ ],
             "oauth2-client-credentials": [ ],
-            "oauth2-password": [ ]
+            "oauth2-password": [ ],
+            "oauth2-implicit": [ ]
           }
         ]
       },
@@ -280,11 +290,21 @@
         },
         "security": [
           {
-            "oauth2": [ ],
-            "oauth2-authorization-code": [ ],
-            "oauth2-implicit": [ ],
-            "oauth2-client-credentials": [ ],
-            "oauth2-password": [ ]
+            "oauth2": [
+              "fake.edit"
+            ],
+            "oauth2-authorization-code": [
+              "fake.edit"
+            ],
+            "oauth2-client-credentials": [
+              "fake.edit"
+            ],
+            "oauth2-password": [
+              "fake.edit"
+            ],
+            "oauth2-implicit": [
+              "fake.edit"
+            ]
           }
         ]
       },
@@ -336,11 +356,21 @@
         },
         "security": [
           {
-            "oauth2": [ ],
-            "oauth2-authorization-code": [ ],
-            "oauth2-implicit": [ ],
-            "oauth2-client-credentials": [ ],
-            "oauth2-password": [ ]
+            "oauth2": [
+              "fake.delete"
+            ],
+            "oauth2-authorization-code": [
+              "fake.delete"
+            ],
+            "oauth2-client-credentials": [
+              "fake.delete"
+            ],
+            "oauth2-password": [
+              "fake.delete"
+            ],
+            "oauth2-implicit": [
+              "fake.delete"
+            ]
           }
         ]
       }
