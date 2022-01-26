@@ -22,8 +22,7 @@ namespace GodelTech.Microservices.Swagger.Tests.Filters
 
             // Act
             var result =
-                OAuth2OperationFilterHelpers.CreateOpenApiSecurityScheme(
-                    "Test Id");
+                OAuth2OperationFilterHelpers.CreateOpenApiSecurityScheme("Test Id");
 
             // Assert
             result.Should().BeEquivalentTo(expectedOpenApiSecurityScheme);
