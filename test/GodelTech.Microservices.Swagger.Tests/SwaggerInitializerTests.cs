@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using FluentAssertions;
-using GodelTech.Microservices.Swagger.Swagger;
+using GodelTech.Microservices.Swagger.Filters;
 using GodelTech.Microservices.Swagger.Tests.Fakes;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -104,12 +104,12 @@ namespace GodelTech.Microservices.Swagger.Tests
             Assert.NotEmpty(options.OperationFilterDescriptors);
             Assert.NotEmpty(options.SchemaFilterDescriptors);
 
-            var expectedAuthorizeCheckOperationFilter = options.OperationFilterDescriptors
+            var expectedOAuth2OperationFilter = options.OperationFilterDescriptors
                 .FirstOrDefault(
                     x =>
-                        x.Type == typeof(AuthorizeCheckOperationFilter)
+                        x.Type == typeof(OAuth2OperationFilter)
                 );
-            Assert.NotNull(expectedAuthorizeCheckOperationFilter);
+            Assert.NotNull(expectedOAuth2OperationFilter);
 
             var expectedIncludedXmlComments = options.DocumentFilterDescriptors
                 .FirstOrDefault(
@@ -163,12 +163,12 @@ namespace GodelTech.Microservices.Swagger.Tests
             Assert.NotEmpty(options.OperationFilterDescriptors);
             Assert.NotEmpty(options.SchemaFilterDescriptors);
 
-            var expectedAuthorizeCheckOperationFilter = options.OperationFilterDescriptors
+            var expectedOAuth2OperationFilter = options.OperationFilterDescriptors
                 .FirstOrDefault(
                     x =>
-                        x.Type == typeof(AuthorizeCheckOperationFilter)
+                        x.Type == typeof(OAuth2OperationFilter)
                 );
-            Assert.NotNull(expectedAuthorizeCheckOperationFilter);
+            Assert.NotNull(expectedOAuth2OperationFilter);
 
             var expectedIncludedXmlComments = options.DocumentFilterDescriptors
                 .FirstOrDefault(

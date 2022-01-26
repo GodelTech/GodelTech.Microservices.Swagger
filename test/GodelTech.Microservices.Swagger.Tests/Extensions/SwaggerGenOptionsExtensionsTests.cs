@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using FluentAssertions;
 using GodelTech.Microservices.Swagger.Extensions;
-using GodelTech.Microservices.Swagger.Swagger;
 using GodelTech.Microservices.Swagger.Tests.Fakes;
 using GodelTech.Microservices.Swagger.Tests.Fakes.Extensions;
 using Microsoft.OpenApi.Models;
