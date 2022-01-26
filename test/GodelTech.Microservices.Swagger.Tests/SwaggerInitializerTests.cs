@@ -85,7 +85,7 @@ namespace GodelTech.Microservices.Swagger.Tests
             };
 
             // Act
-            Initializer.ConfigureSwaggerGenOptions(options);
+            Initializer.ExposedConfigureSwaggerGenOptions(options);
 
             // Assert
             Assert.Equal(expectedCount, options.SwaggerGeneratorOptions.SecuritySchemes.Keys.Count);
@@ -141,7 +141,7 @@ namespace GodelTech.Microservices.Swagger.Tests
             };
 
             // Act
-            Initializer.ConfigureSwaggerGenOptions(options);
+            Initializer.ExposedConfigureSwaggerGenOptions(options);
 
             // Assert
             Assert.Equal(
@@ -186,7 +186,7 @@ namespace GodelTech.Microservices.Swagger.Tests
 
             // Act
             Initializer = new FakeSwaggerInitializer(null);
-            Initializer.ConfigureSwaggerUiOptions(options);
+            Initializer.ExposedConfigureSwaggerUiOptions(options);
 
             // Assert
             var swaggerEndpoint = Assert.Single(options.ConfigObject.Urls);

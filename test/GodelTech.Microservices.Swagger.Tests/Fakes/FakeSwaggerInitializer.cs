@@ -12,12 +12,12 @@ namespace GodelTech.Microservices.Swagger.Tests.Fakes
 
         }
 
-        public new void ConfigureSwaggerGenOptions(SwaggerGenOptions options)
+        public void ExposedConfigureSwaggerGenOptions(SwaggerGenOptions options)
         {
             base.ConfigureSwaggerGenOptions(options);
         }
         
-        public new void ConfigureSwaggerUiOptions(SwaggerUIOptions options)
+        public void ExposedConfigureSwaggerUiOptions(SwaggerUIOptions options)
         {
             base.ConfigureSwaggerUiOptions(options);
         }
