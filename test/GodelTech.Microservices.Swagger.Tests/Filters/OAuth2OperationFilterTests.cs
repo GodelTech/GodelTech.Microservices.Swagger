@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Reflection.Emit;
 using System.Text.Json;
 using FluentAssertions;
+using GodelTech.Microservices.Swagger.Demo.Controllers;
 using GodelTech.Microservices.Swagger.Filters;
-using GodelTech.Microservices.Swagger.Tests.Fakes;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -87,8 +87,8 @@ namespace GodelTech.Microservices.Swagger.Tests.Filters
         public void Apply_Success()
         {
             // Arrange
-            var method = typeof(FakeController).GetMethod("FakeMethod");
-            var scope = new List<string>{"Test scope"};
+            var method = typeof(FakeController).GetMethod("Post");
+            var scope = new List<string>{"fake.add"};
 
             var context = new OperationFilterContext(
                 new ApiDescription(),
