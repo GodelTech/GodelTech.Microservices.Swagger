@@ -11,7 +11,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D97267BB-A79
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{51419E14-4C27-436F-BC26-F7C84D457611}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GodelTech.Microservices.Swagger.IntegrationTests", "test\GodelTech.Microservices.Swagger.IntegrationTests\GodelTech.Microservices.Swagger.IntegrationTests.csproj", "{03C19750-4CD1-449D-BEA8-9F0EC3A0C044}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GodelTech.Microservices.Swagger.IntegrationTests", "test\GodelTech.Microservices.Swagger.IntegrationTests\GodelTech.Microservices.Swagger.IntegrationTests.csproj", "{00000000-0000-0000-0000-000000000003}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "demo", "demo", "{5727C0AA-87AA-4341-B6EC-9961E92931E7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GodelTech.Microservices.Swagger.Demo", "demo\GodelTech.Microservices.Swagger.Demo\GodelTech.Microservices.Swagger.Demo.csproj", "{53469B5E-80E0-4B85-9632-E041FCA30EFE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,10 +31,14 @@ Global
 		{00000000-0000-0000-0000-000000000002}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00000000-0000-0000-0000-000000000002}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{00000000-0000-0000-0000-000000000002}.Release|Any CPU.Build.0 = Release|Any CPU
-		{03C19750-4CD1-449D-BEA8-9F0EC3A0C044}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{03C19750-4CD1-449D-BEA8-9F0EC3A0C044}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{03C19750-4CD1-449D-BEA8-9F0EC3A0C044}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{03C19750-4CD1-449D-BEA8-9F0EC3A0C044}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00000000-0000-0000-0000-000000000003}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00000000-0000-0000-0000-000000000003}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00000000-0000-0000-0000-000000000003}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00000000-0000-0000-0000-000000000003}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53469B5E-80E0-4B85-9632-E041FCA30EFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53469B5E-80E0-4B85-9632-E041FCA30EFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53469B5E-80E0-4B85-9632-E041FCA30EFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53469B5E-80E0-4B85-9632-E041FCA30EFE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -38,7 +46,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{00000000-0000-0000-0000-000000000001} = {D97267BB-A79A-42F1-AE24-46CF3B41A4B6}
 		{00000000-0000-0000-0000-000000000002} = {51419E14-4C27-436F-BC26-F7C84D457611}
-		{03C19750-4CD1-449D-BEA8-9F0EC3A0C044} = {51419E14-4C27-436F-BC26-F7C84D457611}
+		{00000000-0000-0000-0000-000000000003} = {51419E14-4C27-436F-BC26-F7C84D457611}
+		{53469B5E-80E0-4B85-9632-E041FCA30EFE} = {5727C0AA-87AA-4341-B6EC-9961E92931E7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B1CA495A-2D85-4A0E-B3D9-ADB1D0B25489}

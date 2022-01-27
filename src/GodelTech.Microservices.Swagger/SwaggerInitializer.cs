@@ -1,93 +1,109 @@
 ﻿using System;
 using GodelTech.Microservices.Core;
-using GodelTech.Microservices.Swagger.Configuration;
-using GodelTech.Microservices.Swagger.Swagger;
+using GodelTech.Microservices.Swagger.Extensions;
+using GodelTech.Microservices.Swagger.Filters;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Swashbuckle.AspNetCore.SwaggerUI;
 
+[assembly: CLSCompliant(false)]
 namespace GodelTech.Microservices.Swagger
 {
-    public class SwaggerInitializer : MicroserviceInitializerBase
+    /// <summary>
+    /// Swagger initializer.
+    /// </summary>
+    public class SwaggerInitializer : IMicroserviceInitializer
     {
-        private SwaggerInitializerOptions _options = new SwaggerInitializerOptions();
+        private readonly SwaggerInitializerOptions _options = new SwaggerInitializerOptions();
 
-        public SwaggerInitializerOptions Options
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SwaggerInitializer"/> class.
+        /// </summary>
+        /// <param name="configure">An <see cref="Action{SwaggerInitializerOptions}"/> to configure the provided <see cref="SwaggerInitializerOptions"/>.</param>
+        public SwaggerInitializer(Action<SwaggerInitializerOptions> configure = null)
         {
-            get => _options;
-            set => _options = value ?? throw new ArgumentNullException(nameof(value));
+            configure?.Invoke(_options);
         }
 
-        public SwaggerInitializer(IConfiguration configuration)
-            : base(configuration)
+        /// <inheritdoc />
+        public virtual void ConfigureServices(IServiceCollection services)
         {
+            services.AddSwaggerGen(ConfigureSwaggerGenOptions);
         }
 
-        public override void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        /// <inheritdoc />
+        public virtual void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (app == null) 
-                throw new ArgumentNullException(nameof(app));
-            if (env == null) 
-                throw new ArgumentNullException(nameof(env));
-
-            // Details can be found here https://github.com/domaindrivendev/Swashbuckle.AspNetCore
-            // Default address http://localhost:5000/swagger/
             app.UseSwagger(ConfigureSwaggerOptions);
             app.UseSwaggerUI(ConfigureSwaggerUiOptions);
         }
 
-        public override void ConfigureServices(IServiceCollection services)
-        {
-            if (services == null) 
-                throw new ArgumentNullException(nameof(services));
-
-            services.AddSwaggerGen(ConfigureSwaggerGenOptions);
-        }
-
-        protected virtual void ConfigureSwaggerOptions(SwaggerOptions options)
-        {
-            options.RouteTemplate = "swagger/{documentName}/swagger.json";
-        }
-
-        protected virtual void ConfigureSwaggerUiOptions(SwaggerUIOptions options)
-        {
-            options.SwaggerEndpoint($"/swagger/{Options.DocumentVersion}/swagger.json", "v1");
-        }
-
+        /// <summary>
+        /// Configure SwaggerGenOptions.
+        /// </summary>
+        /// <param name="options">SwaggerGenOptions.</param>
         protected virtual void ConfigureSwaggerGenOptions(SwaggerGenOptions options)
         {
-            options.AddGenericAuthHeaderFlowSecurityDefinition();
+            options.AddAuthHeaderFlowSecurityDefinition();
 
-            if (!string.IsNullOrWhiteSpace(Options.AuthorizeEndpointUrl) &&
-                !string.IsNullOrWhiteSpace(Options.TokenEndpointUrl))
-                options.AddAuthorizationCodeSecurityDefinition(Options);
-
-            if (!string.IsNullOrWhiteSpace(Options.AuthorizeEndpointUrl))
-                options.AddImplicitFlowSecurityDefinition(Options);
-
-            if (!string.IsNullOrWhiteSpace(Options.AuthorizeEndpointUrl) &&
-                !string.IsNullOrWhiteSpace(Options.TokenEndpointUrl))
-                options.AddResourceOwnerFlowSecurityDefinition(Options);
-
-            if (!string.IsNullOrWhiteSpace(Options.TokenEndpointUrl))
-                options.AddClientCredentialsSecurityFlowDefinition(Options);
-
-            options.SwaggerDoc(Options.DocumentVersion, new OpenApiInfo
+            if (_options.AuthorizationUrl != null && _options.TokenUrl != null)
             {
-                Title = Options.DocumentTitle,
-                Version = Options.DocumentVersion
-            });
+                options.AddAuthorizationCodeFlowSecurityDefinition(_options);
+            }
+
+            if (_options.TokenUrl != null)
+            {
+                options.AddClientCredentialsFlowSecurityDefinition(_options);
+            }
+
+            if (_options.AuthorizationUrl != null && _options.TokenUrl != null)
+            {
+                options.AddResourceOwnerFlowSecurityDefinition(_options);
+            }
+
+            if (_options.AuthorizationUrl != null)
+            {
+                options.AddImplicitFlowSecurityDefinition(_options);
+            }
+
+            options.SwaggerDoc(
+                _options.DocumentVersion,
+                new OpenApiInfo
+                {
+                    Title = _options.DocumentTitle,
+                    Version = _options.DocumentVersion
+                }
+            );
 
             options.EnableAnnotations();
-            options.OperationFilter<AuthorizeCheckOperationFilter>();
+            options.OperationFilter<OAuth2OperationFilter>();
 
-            if (!string.IsNullOrWhiteSpace(Options.XmlCommentsFilePath))
-                options.IncludeXmlComments(Options.XmlCommentsFilePath, true);
+            if (!string.IsNullOrWhiteSpace(_options.XmlCommentsFilePath))
+            {
+                options.IncludeXmlComments(_options.XmlCommentsFilePath, true);
+            }
+        }
+
+        /// <summary>
+        /// Configure SwaggerOptions.
+        /// </summary>
+        /// <param name="options">SwaggerOptions.</param>
+        protected virtual void ConfigureSwaggerOptions(SwaggerOptions options)
+        {
+
+        }
+
+        /// <summary>
+        /// Configure SwaggerUIOptions.
+        /// </summary>
+        /// <param name="options">SwaggerUIOptions.</param>
+        protected virtual void ConfigureSwaggerUiOptions(SwaggerUIOptions options)
+        {
+            options.SwaggerEndpoint($"/swagger/{_options.DocumentVersion}/swagger.json", _options.DocumentVersion);
         }
     }
 }

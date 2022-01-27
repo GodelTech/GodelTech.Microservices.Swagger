@@ -1,79 +1,83 @@
-﻿//using System;
-//using System.Net;
-//using FluentAssertions;
-//using GodelTech.Microservices.Core;
-//using GodelTech.Microservices.Swagger.Configuration;
-//using GodelTech.Microservices.Swagger.Tests.Utils;
-//using Microsoft.AspNetCore.Mvc;
-//using Microsoft.Extensions.Configuration;
-//using NUnit.Framework;
+﻿using System;
+using System.IO;
+using System.Net;
+using System.Threading.Tasks;
+using Xunit;
 
-//namespace GodelTech.Microservices.Swagger.Tests
-//{
-//    [TestFixture]
-//    public class SwaggerInitializerTests : InMemoryServerTest
-//    {
-//        [Test]
-//        public void WhenDefaultConfiguration_Should_ReturnSwaggerUiAtDefaultAddress()
-//        {
-//            SetUpInMemoryServer();
+namespace GodelTech.Microservices.Swagger.IntegrationTests
+{
+    public sealed class SwaggerInitializerTests : IDisposable
+    {
+        private readonly AppTestFixture _fixture;
 
-//            Client.GetAsync("/swagger/index.html").GetAwaiter().GetResult().StatusCode.Should().Be(HttpStatusCode.OK);
-//        }
+        public SwaggerInitializerTests()
+        {
+            _fixture = new AppTestFixture();
+        }
 
-//        [Test]
-//        public void WhenDefaultConfiguration_Should_ReturnSwaggerDocumentAtDefaultAddress()
-//        {
-//            SetUpInMemoryServer();
+        public void Dispose()
+        {
+            _fixture?.Dispose();
+        }
 
-//            Client.GetAsync("/swagger/v1/swagger.json").GetAwaiter().GetResult().StatusCode.Should().Be(HttpStatusCode.OK);
-//        }
+        [Theory]
+        [InlineData("/swagger")]
+        [InlineData("/swagger/index.html")]
+        public async Task Configure_CheckHtml(string path)
+        {
+            // Arrange
+            var client = _fixture.CreateClient();
 
-//        [Test]
-//        public void WhenApiVersionIsNonDefault_Should_ReturnSwaggerDocumentAtAddressContainingApiVersion()
-//        {
-//            SetUpInMemoryServer(x =>
-//            {
-//                x.DocumentVersion = "v123";
-//            });
+            var expectedResultValue = await File.ReadAllTextAsync("Documents/swaggerHtml.txt");
+            expectedResultValue = expectedResultValue.Replace(
+                Environment.NewLine,
+                "\n",
+                StringComparison.InvariantCulture
+            );
 
-//            Client.GetAsync("/swagger/v123/swagger.json").GetAwaiter().GetResult().StatusCode.Should().Be(HttpStatusCode.OK);
-//        }
+            // Act
+            var result = await client.GetAsync(
+                new Uri(
+                    path,
+                    UriKind.Relative
+                )
+            );
 
-//        private void SetUpInMemoryServer(Action<SwaggerInitializerOptions> configure = null)
-//        {
-//            UseInMemoryServer(x =>
-//                    new[]
-//                    {
-//                        CreateSwaggerInitializer(x, configure)
-//                    },
-//                    new[]
-//                    {
-//                        typeof(RegressionV1Controller)
-//                    });
-//        }
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, result.StatusCode);
+            Assert.Equal(
+                expectedResultValue,
+                await result.Content.ReadAsStringAsync()
+            );
+        }
 
-//        private IMicroserviceInitializer CreateSwaggerInitializer(IConfiguration configuration, Action<SwaggerInitializerOptions> configure)
-//        {
-//            var initializer = new SwaggerInitializer(configuration);
+        [Fact]
+        public async Task Configure_CheckJson()
+        {
+            // Arrange
+            var client = _fixture.CreateClient();
 
-//            configure?.Invoke(initializer.Options);
+            var expectedResultValue = await File.ReadAllTextAsync("Documents/swaggerJson.txt");
+            expectedResultValue = expectedResultValue.Replace(
+                Environment.NewLine,
+                "\n",
+                StringComparison.InvariantCulture
+            );
 
-//            return initializer;
-//        }
+            // Act
+            var result = await client.GetAsync(
+                new Uri(
+                    "/swagger/v2/swagger.json",
+                    UriKind.Relative
+                )
+            );
 
-//        #region Helper classes
-
-//        [Route("v1/users")]
-//        public class RegressionV1Controller : Controller
-//        {
-//            [HttpGet("{userId}")]
-//            public ActionResult GetByClientId(int userId)
-//            {
-//                return Ok();
-//            }
-//        }
-
-//        #endregion
-//    }
-//}
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, result.StatusCode);
+            Assert.Equal(
+                expectedResultValue,
+                await result.Content.ReadAsStringAsync()
+            );
+        }
+    }
+}
