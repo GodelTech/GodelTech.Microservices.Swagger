@@ -136,6 +136,5 @@ namespace GodelTech.Microservices.Swagger.Tests
             // Assert
             Assert.Equal(expectedResult, _options.Scopes);
         }
-
     }
 }
