@@ -24,19 +24,19 @@ Simplest usage of swagger initializer may look as follows:
         protected override IEnumerable<IMicroserviceInitializer> CreateInitializers()
         {
             ...
-            yield return new SwaggerInitializer(Configuration)
-            {
-                Options =
+            yield return new SwaggerInitializer(
+                options =>
                 {
-                    AuthorizeEndpointUrl = "http://authorize.url",
-                    TokenEndpointUrl = "http://token.url",
-                    DocumentTitle = "CRM API",
-                    SupportedScopes = new[]
+                    options.DocumentTitle = "Demo API";
+                    options.DocumentVersion = "v1";
+                    options.AuthorizationUrl = new Uri("http://authorize.url");
+                    options.TokenUrl = new Uri("http://token.url");
+                    options.Scopes = new Dictionary<string, string>
                     {
-                        new ScopeDetails { Name = "Scope1", Description = "Scope description" }
-                    }
+                        { "Scope1", "Scope description" }
+                    };
                 }
-            };
+            );
             ...
         }
     }
@@ -45,23 +45,23 @@ This code snippet adds swagger endpoints to your application and exposes documen
 
 ## Configuration Options
 
-Easiest way to configure initializer is to use properties of `SwaggerInitializerOptions` class. THe following table contains list of available settings:
+Easiest way to configure initializer is to use properties of `SwaggerInitializerOptions` class. The following table contains list of available settings:
 
 | Property | Description |
 |---|---|
 | `DocumentTitle` | Title of your Swagger document. Default value is `API`. |
-| `DocumentVersion` | Version of API exposed by service. Default value is `v1` |
-| `AuthorizeEndpointUrl` | *(Optional)* Identity provider endpoint used by Swagger UI to authorize user. If this value is not defined some OAuth flows might not be available in Swagger UI |
-| `TokenEndpointUrl` | *(Optional)* Identity provider token endpont used by Swagger UI to obtain token used to invoke API endpoints. If this endpoint is not available some OAuth flows might not be available in Swagger UI |
+| `DocumentVersion` | Version of API exposed by service. Default value is `v1`. |
 | `XmlCommentsFilePath` | *(Optional)* Path XML comments provides by project build. This information is used by Swagger generator to provide description of exposed models and properties. |
+| `AuthorizationUrl` | *(Optional)* Identity provider endpoint used by Swagger UI to authorize user. If this value is not defined some OAuth flows might not be available in Swagger UI. |
+| `TokenUrl` | *(Optional)* Identity provider token endpont used by Swagger UI to obtain token used to invoke API endpoints. If this endpoint is not available some OAuth flows might not be available in Swagger UI. |
 
 Full control over `SwaggerInitializer` can be obtained by defined child class. The following protected methods are avaible:
 
 | Method | Description |
 |---|---|
+| `ConfigureSwaggerGenOptions` | This method is passed as parameter to `services.AddSwaggerGen()`. It configures security definitions based on values defined in `Options` property. Additionally it adds support of annotations, injects security schemes to endpoint definitions and enables XML comments support. |
 | `ConfigureSwaggerOptions` | This method is passed as parameter to `app.UseSwagger()`. This method configures location of Swagger document uri. |
 | `ConfigureSwaggerUiOptions` | This method is passed as parameter to `app.UseSwaggerUI()`. This method configures route used by Swagger endpoint. |
-| `ConfigureSwaggerGenOptions` | This method is passed as parameter to `services.AddSwaggerGen()`. It configures security definitions based on values defined in `Options` property. Additionally it adds support of annotations, injects security schemes to endpoint definitions and enables XML comments support. |
 
 ## Links
 
