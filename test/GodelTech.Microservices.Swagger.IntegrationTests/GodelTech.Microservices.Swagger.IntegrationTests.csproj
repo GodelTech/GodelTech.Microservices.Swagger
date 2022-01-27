@@ -30,10 +30,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<FrameworkReference Include="Microsoft.AspNetCore.App" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<ProjectReference Include="..\..\demo\GodelTech.Microservices.Swagger.Demo\GodelTech.Microservices.Swagger.Demo.csproj" />
 		<ProjectReference Include="..\..\src\GodelTech.Microservices.Swagger\GodelTech.Microservices.Swagger.csproj" />
 	</ItemGroup>
