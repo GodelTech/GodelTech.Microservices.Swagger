@@ -5,7 +5,7 @@ namespace GodelTech.Microservices.Swagger.Tests
     public class OAuth2SecurityTests
     {
         [Fact]
-        public void OAuth2Security_Fields_Are_Not_Changed()
+        public void OAuth2Security_Success()
         {
             // Arrange & Act & Assert
             Assert.Equal("oauth2", OAuth2Security.OAuth2);

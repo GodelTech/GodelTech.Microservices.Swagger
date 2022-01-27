@@ -1,4 +1,5 @@
 ﻿using System;
+using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Swashbuckle.AspNetCore.SwaggerUI;
 
@@ -16,7 +17,12 @@ namespace GodelTech.Microservices.Swagger.Tests.Fakes
         {
             base.ConfigureSwaggerGenOptions(options);
         }
-        
+
+        public void ExposedConfigureSwaggerOptions(SwaggerOptions options)
+        {
+            base.ConfigureSwaggerOptions(options);
+        }
+
         public void ExposedConfigureSwaggerUiOptions(SwaggerUIOptions options)
         {
             base.ConfigureSwaggerUiOptions(options);

@@ -67,8 +67,7 @@ namespace GodelTech.Microservices.Swagger.Tests.Extensions
         }
 
         [Fact]
-        public void
-            AddAuthorizationCodeFlowSecurityDefinition_WhenTokenUrlIsNull_ThrowsArgumentException()
+        public void AddAuthorizationCodeFlowSecurityDefinition_WhenTokenUrlIsNull_ThrowsArgumentException()
         {
             // Arrange & Act & Assert
             AssertExtensions.ArgumentException(
@@ -192,8 +191,7 @@ namespace GodelTech.Microservices.Swagger.Tests.Extensions
             };
 
             // Act
-            options.AddClientCredentialsFlowSecurityDefinition(
-                initializerOptions);
+            options.AddClientCredentialsFlowSecurityDefinition(initializerOptions);
 
             // Assert
             Assert.Single(options.SwaggerGeneratorOptions.SecuritySchemes);
@@ -278,9 +276,7 @@ namespace GodelTech.Microservices.Swagger.Tests.Extensions
             };
 
             // Act
-            options.AddResourceOwnerFlowSecurityDefinition(
-                initializerOptions
-            );
+            options.AddResourceOwnerFlowSecurityDefinition(initializerOptions);
 
             // Assert
             Assert.Single(options.SwaggerGeneratorOptions.SecuritySchemes);
@@ -353,9 +349,7 @@ namespace GodelTech.Microservices.Swagger.Tests.Extensions
             };
 
             // Act
-            options.AddImplicitFlowSecurityDefinition(
-                initializerOptions
-            );
+            options.AddImplicitFlowSecurityDefinition(initializerOptions);
 
             // Assert
             Assert.Single(options.SwaggerGeneratorOptions.SecuritySchemes);

@@ -22,7 +22,7 @@ namespace GodelTech.Microservices.Swagger.Tests.Filters
         }
 
         [Fact]
-        public void Apply_When_OpenApiOperation_IsNull_Throws_ArgumentNullException()
+        public void Apply_WhenOpenApiOperationIsNull_ThrowsArgumentNullException()
         {
             // Arrange
             var context = new OperationFilterContext(
@@ -39,20 +39,18 @@ namespace GodelTech.Microservices.Swagger.Tests.Filters
 
             // Act & Assert
             var result = Assert.Throws<ArgumentNullException>(
-                () =>
-                    _filter.Apply(null, context)
+                () => _filter.Apply(null, context)
             );
 
             Assert.Equal("operation", result.ParamName);
         }
 
         [Fact]
-        public void Apply_When_OperationFilterContext_IsNull_Throws_ArgumentNullException()
+        public void Apply_WhenOperationFilterContextIsNull_ThrowsArgumentNullException()
         {
             // Arrange & Act
             var result = Assert.Throws<ArgumentNullException>(
-                () =>
-                    _filter.Apply(new OpenApiOperation(), null)
+                () => _filter.Apply(new OpenApiOperation(), null)
             );
 
             // Assert
@@ -60,7 +58,7 @@ namespace GodelTech.Microservices.Swagger.Tests.Filters
         }
 
         [Fact]
-        public void Apply_When_AuthorizeAttributes_Or_SwaggerSecurityAttributes_IsEmpty_Success()
+        public void Apply_WhenAuthorizeAttributesOrSwaggerSecurityAttributesIsEmpty_Success()
         {
             // Arrange
             var context = new OperationFilterContext(
@@ -109,40 +107,38 @@ namespace GodelTech.Microservices.Swagger.Tests.Filters
                 Security = null
             };
 
-            var expectedOpenApiResponses =
-                new Dictionary<string, OpenApiResponse>
-                {
-                    { "401", new OpenApiResponse { Description = "Unauthorized" }},
-                    { "403", new OpenApiResponse { Description = "Forbidden" }}
-                };
+            var expectedOpenApiResponses = new Dictionary<string, OpenApiResponse>
+            {
+                {"401", new OpenApiResponse {Description = "Unauthorized"}},
+                {"403", new OpenApiResponse {Description = "Forbidden"}}
+            };
 
-            var expectedOpenApiSecurityRequirements =
-                new List<OpenApiSecurityRequirement>
+            var expectedOpenApiSecurityRequirements = new List<OpenApiSecurityRequirement>
+            {
+                new OpenApiSecurityRequirement
                 {
-                    new OpenApiSecurityRequirement
                     {
-                        {
-                            OAuth2OperationFilterHelpers.CreateOpenApiSecurityScheme(OAuth2Security.OAuth2),
-                            scope
-                        },
-                        {
-                            OAuth2OperationFilterHelpers.CreateOpenApiSecurityScheme(OAuth2Security.AuthorizationCode),
-                            scope
-                        },
-                        {
-                            OAuth2OperationFilterHelpers.CreateOpenApiSecurityScheme(OAuth2Security.ClientCredentials),
-                            scope
-                        },
-                        {
-                            OAuth2OperationFilterHelpers.CreateOpenApiSecurityScheme(OAuth2Security.ResourceOwnerPasswordCredentials),
-                            scope
-                        },
-                        {
-                            OAuth2OperationFilterHelpers.CreateOpenApiSecurityScheme(OAuth2Security.Implicit),
-                            scope
-                        }
+                        OAuth2OperationFilterHelpers.CreateOpenApiSecurityScheme(OAuth2Security.OAuth2),
+                        scope
+                    },
+                    {
+                        OAuth2OperationFilterHelpers.CreateOpenApiSecurityScheme(OAuth2Security.AuthorizationCode),
+                        scope
+                    },
+                    {
+                        OAuth2OperationFilterHelpers.CreateOpenApiSecurityScheme(OAuth2Security.ClientCredentials),
+                        scope
+                    },
+                    {
+                        OAuth2OperationFilterHelpers.CreateOpenApiSecurityScheme(OAuth2Security.ResourceOwnerPasswordCredentials),
+                        scope
+                    },
+                    {
+                        OAuth2OperationFilterHelpers.CreateOpenApiSecurityScheme(OAuth2Security.Implicit),
+                        scope
                     }
-                };
+                }
+            };
 
             // Act
             _filter.Apply(operation, context);

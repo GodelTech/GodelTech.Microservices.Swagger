@@ -24,7 +24,7 @@ namespace GodelTech.Microservices.Swagger.Tests
         public void DocumentTitle_Set_Success()
         {
             // Arrange
-            var expectedResult = "TestDocumentTitle";
+            var expectedResult = "Test DocumentTitle";
 
             // Act
             _options.DocumentTitle = expectedResult;
@@ -45,7 +45,7 @@ namespace GodelTech.Microservices.Swagger.Tests
         public void DocumentVersion_Set_Success()
         {
             // Arrange
-            var expectedResult = "TestDocumentVersion";
+            var expectedResult = "Test DocumentVersion";
 
             // Act
             _options.DocumentVersion = expectedResult;
@@ -65,7 +65,7 @@ namespace GodelTech.Microservices.Swagger.Tests
         public void XmlCommentsFilePath_Set_Success()
         {
             // Arrange
-            var expectedResult = "TestXmlCommentsFilePath";
+            var expectedResult = "Test XmlCommentsFilePath";
 
             // Act
             _options.XmlCommentsFilePath = expectedResult;

@@ -7,6 +7,8 @@ using FluentAssertions;
 using GodelTech.Microservices.Swagger.Filters;
 using GodelTech.Microservices.Swagger.Tests.Fakes;
 using Microsoft.OpenApi.Models;
+using Moq;
+using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using Xunit;
@@ -15,8 +17,6 @@ namespace GodelTech.Microservices.Swagger.Tests
 {
     public class SwaggerInitializerTests
     {
-        public FakeSwaggerInitializer Initializer { get; set; }
-
         public static IEnumerable<object[]> SwaggerGenOptionsMemberData =>
             new Collection<object[]>
             {
@@ -66,82 +66,33 @@ namespace GodelTech.Microservices.Swagger.Tests
 
         [Theory]
         [MemberData(nameof(SwaggerGenOptionsMemberData))]
-        public void ConfigureSwaggerGenOptions_When_XmlCommentsFilePath_IsNull_Success(Uri authorizationUri, Uri tokenUri, IList<string> expectedSchemes, int expectedCount)
+        public void ConfigureSwaggerGenOptions_WhenXmlCommentsFilePathIsNull_Success(
+            Uri authorizationUri,
+            Uri tokenUri,
+            IList<string> expectedSchemes,
+            int expectedCount)
         {
             // Arrange
             var options = new SwaggerGenOptions();
 
-            Initializer = new FakeSwaggerInitializer(
+            var initializer = new FakeSwaggerInitializer(
                 swaggerInitializerOptions =>
                 {
+                    swaggerInitializerOptions.DocumentTitle = "Test DocumentTitle";
+                    swaggerInitializerOptions.DocumentVersion = "Test DocumentVersion";
                     swaggerInitializerOptions.AuthorizationUrl = authorizationUri;
                     swaggerInitializerOptions.TokenUrl = tokenUri;
                 }
             );
+
             var expectedOpeApiInfo = new OpenApiInfo
             {
-                Title = "API",
-                Version = "v1"
+                Title = "Test DocumentTitle",
+                Version = "Test DocumentVersion"
             };
 
             // Act
-            Initializer.ExposedConfigureSwaggerGenOptions(options);
-
-            // Assert
-            Assert.Equal(expectedCount, options.SwaggerGeneratorOptions.SecuritySchemes.Keys.Count);
-            Assert.True(options.SwaggerGeneratorOptions.SecuritySchemes.Keys.SequenceEqual(expectedSchemes));
-
-            Assert.Single(options.SwaggerGeneratorOptions.SwaggerDocs);
-            var swaggerDocs = Assert.Contains(
-                "v1",
-                options.SwaggerGeneratorOptions.SwaggerDocs
-            );
-            swaggerDocs.Should().BeEquivalentTo(expectedOpeApiInfo);
-
-            Assert.NotEmpty(options.DocumentFilterDescriptors);
-            Assert.NotEmpty(options.ParameterFilterDescriptors);
-            Assert.NotEmpty(options.RequestBodyFilterDescriptors);
-            Assert.NotEmpty(options.OperationFilterDescriptors);
-            Assert.NotEmpty(options.SchemaFilterDescriptors);
-
-            var expectedOAuth2OperationFilter = options.OperationFilterDescriptors
-                .FirstOrDefault(
-                    x =>
-                        x.Type == typeof(OAuth2OperationFilter)
-                );
-            Assert.NotNull(expectedOAuth2OperationFilter);
-
-            var expectedIncludedXmlComments = options.DocumentFilterDescriptors
-                .FirstOrDefault(
-                    x =>
-                        x.Type == typeof(XmlCommentsDocumentFilter)
-                );
-            Assert.Null(expectedIncludedXmlComments);
-        }
-
-        [Theory]
-        [MemberData(nameof(SwaggerGenOptionsMemberData))]
-        public void ConfigureSwaggerGenOptions_When_XmlCommentsFilePath_IsNotNull_Success(Uri authorizationUri, Uri tokenUri, IList<string> expectedSchemes, int expectedCount)
-        {
-            // Arrange
-            var options = new SwaggerGenOptions();
-            
-            Initializer = new FakeSwaggerInitializer(
-                swaggerInitializerOptions =>
-                {
-                    swaggerInitializerOptions.AuthorizationUrl = authorizationUri;
-                    swaggerInitializerOptions.TokenUrl = tokenUri;
-                    swaggerInitializerOptions.XmlCommentsFilePath = Path.GetFullPath("Documents/swagger.xml");
-                }
-            );
-            var expectedOpeApiInfo = new OpenApiInfo
-            {
-                Title = "API",
-                Version = "v1"
-            };
-
-            // Act
-            Initializer.ExposedConfigureSwaggerGenOptions(options);
+            initializer.ExposedConfigureSwaggerGenOptions(options);
 
             // Assert
             Assert.Equal(
@@ -152,7 +103,7 @@ namespace GodelTech.Microservices.Swagger.Tests
 
             Assert.Single(options.SwaggerGeneratorOptions.SwaggerDocs);
             var swaggerDocs = Assert.Contains(
-                "v1",
+                "Test DocumentVersion",
                 options.SwaggerGeneratorOptions.SwaggerDocs
             );
             swaggerDocs.Should().BeEquivalentTo(expectedOpeApiInfo);
@@ -164,18 +115,89 @@ namespace GodelTech.Microservices.Swagger.Tests
             Assert.NotEmpty(options.SchemaFilterDescriptors);
 
             var expectedOAuth2OperationFilter = options.OperationFilterDescriptors
-                .FirstOrDefault(
-                    x =>
-                        x.Type == typeof(OAuth2OperationFilter)
-                );
+                .FirstOrDefault(x => x.Type == typeof(OAuth2OperationFilter));
             Assert.NotNull(expectedOAuth2OperationFilter);
 
             var expectedIncludedXmlComments = options.DocumentFilterDescriptors
-                .FirstOrDefault(
-                    x =>
-                        x.Type == typeof(XmlCommentsDocumentFilter)
-                );
+                .FirstOrDefault(x => x.Type == typeof(XmlCommentsDocumentFilter));
+            Assert.Null(expectedIncludedXmlComments);
+        }
+
+        [Theory]
+        [MemberData(nameof(SwaggerGenOptionsMemberData))]
+        public void ConfigureSwaggerGenOptions_WhenXmlCommentsFilePathIsNotNull_Success(
+            Uri authorizationUri,
+            Uri tokenUri,
+            IList<string> expectedSchemes,
+            int expectedCount)
+        {
+            // Arrange
+            var options = new SwaggerGenOptions();
+
+            var initializer = new FakeSwaggerInitializer(
+                swaggerInitializerOptions =>
+                {
+                    swaggerInitializerOptions.DocumentTitle = "Test DocumentTitle";
+                    swaggerInitializerOptions.DocumentVersion = "Test DocumentVersion";
+                    swaggerInitializerOptions.AuthorizationUrl = authorizationUri;
+                    swaggerInitializerOptions.TokenUrl = tokenUri;
+                    swaggerInitializerOptions.XmlCommentsFilePath = Path.GetFullPath("Documents/swagger.xml");
+                }
+            );
+
+            var expectedOpeApiInfo = new OpenApiInfo
+            {
+                Title = "Test DocumentTitle",
+                Version = "Test DocumentVersion"
+            };
+
+            // Act
+            initializer.ExposedConfigureSwaggerGenOptions(options);
+
+            // Assert
+            Assert.Equal(
+                expectedCount,
+                options.SwaggerGeneratorOptions.SecuritySchemes.Keys.Count
+            );
+            Assert.True(options.SwaggerGeneratorOptions.SecuritySchemes.Keys.SequenceEqual(expectedSchemes));
+
+            Assert.Single(options.SwaggerGeneratorOptions.SwaggerDocs);
+            var swaggerDocs = Assert.Contains(
+                "Test DocumentVersion",
+                options.SwaggerGeneratorOptions.SwaggerDocs
+            );
+            swaggerDocs.Should().BeEquivalentTo(expectedOpeApiInfo);
+
+            Assert.NotEmpty(options.DocumentFilterDescriptors);
+            Assert.NotEmpty(options.ParameterFilterDescriptors);
+            Assert.NotEmpty(options.RequestBodyFilterDescriptors);
+            Assert.NotEmpty(options.OperationFilterDescriptors);
+            Assert.NotEmpty(options.SchemaFilterDescriptors);
+
+            var expectedOAuth2OperationFilter = options.OperationFilterDescriptors
+                .FirstOrDefault(x => x.Type == typeof(OAuth2OperationFilter));
+            Assert.NotNull(expectedOAuth2OperationFilter);
+
+            var expectedIncludedXmlComments = options.DocumentFilterDescriptors
+                .FirstOrDefault(x => x.Type == typeof(XmlCommentsDocumentFilter));
             Assert.NotNull(expectedIncludedXmlComments);
+        }
+
+        [Fact]
+        public void ConfigureCorrelationIdOptions_Success()
+        {
+            // Arrange
+            var mockOptions = new Mock<SwaggerOptions>(MockBehavior.Strict);
+
+            var initializer = new FakeSwaggerInitializer(null);
+
+            // Act
+            initializer.ExposedConfigureSwaggerOptions(mockOptions.Object);
+
+            // Assert
+            Assert.NotNull(mockOptions.Object);
+
+            mockOptions.VerifyAll();
         }
 
         [Fact]
@@ -184,15 +206,21 @@ namespace GodelTech.Microservices.Swagger.Tests
             // Arrange
             var options = new SwaggerUIOptions();
 
+            var initializer = new FakeSwaggerInitializer(
+                swaggerInitializerOptions =>
+                {
+                    swaggerInitializerOptions.DocumentVersion = "Test DocumentVersion";
+                }
+            );
+
             // Act
-            Initializer = new FakeSwaggerInitializer(null);
-            Initializer.ExposedConfigureSwaggerUiOptions(options);
+            initializer.ExposedConfigureSwaggerUiOptions(options);
 
             // Assert
             var swaggerEndpoint = Assert.Single(options.ConfigObject.Urls);
 
-            Assert.Equal("/swagger/v1/swagger.json", swaggerEndpoint.Url);
-            Assert.Equal("v1", swaggerEndpoint.Name);
+            Assert.Equal("/swagger/Test DocumentVersion/swagger.json", swaggerEndpoint.Url);
+            Assert.Equal("Test DocumentVersion", swaggerEndpoint.Name);
         }
     }
 }

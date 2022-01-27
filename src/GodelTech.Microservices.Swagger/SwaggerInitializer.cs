@@ -103,7 +103,7 @@ namespace GodelTech.Microservices.Swagger
         /// <param name="options">SwaggerUIOptions.</param>
         protected virtual void ConfigureSwaggerUiOptions(SwaggerUIOptions options)
         {
-            options.SwaggerEndpoint($"/swagger/{_options.DocumentVersion}/swagger.json", "v1");
+            options.SwaggerEndpoint($"/swagger/{_options.DocumentVersion}/swagger.json", _options.DocumentVersion);
         }
     }
 }
