@@ -1,33 +1,14 @@
-﻿using System.IO;
+﻿using GodelTech.Microservices.Swagger.Demo;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.Hosting;
 
 namespace GodelTech.Microservices.Swagger.IntegrationTests
 {
-    public class AppTestFixture : WebApplicationFactory<TestStartup>
+    public class AppTestFixture : WebApplicationFactory<Startup>
     {
-        protected override IHostBuilder CreateHostBuilder()
+        protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
-            var builder = Host
-                .CreateDefaultBuilder()
-                .ConfigureWebHostDefaults(
-                    x =>
-                    {
-                        x.UseStartup<TestStartup>()
-                            .UseTestServer();
-                    }
-                );
-
-            return builder;
-        }
-
-        protected override IHost CreateHost(IHostBuilder builder)
-        {
-            builder.UseContentRoot(Directory.GetCurrentDirectory());
-
-            return base.CreateHost(builder);
+            builder.UseSetting("https_port", "8080");
         }
     }
 }

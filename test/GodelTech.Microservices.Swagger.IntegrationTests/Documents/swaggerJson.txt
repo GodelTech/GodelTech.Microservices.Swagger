@@ -1,7 +1,7 @@
 ﻿{
   "openapi": "3.0.1",
   "info": {
-    "title": "API",
+    "title": "Demo API",
     "version": "v1"
   },
   "paths": {
@@ -450,6 +450,60 @@
         "description": "Standard Authorization header using the Bearer scheme. Example: \"bearer {token}\"",
         "name": "Authorization",
         "in": "header"
+      },
+      "oauth2-authorization-code": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "http://authorize.url/",
+            "tokenUrl": "http://token.url/",
+            "scopes": {
+              "fake.add": "add",
+              "fake.edit": "edit",
+              "fake.delete": "delete"
+            }
+          }
+        }
+      },
+      "oauth2-client-credentials": {
+        "type": "oauth2",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "http://token.url/",
+            "scopes": {
+              "fake.add": "add",
+              "fake.edit": "edit",
+              "fake.delete": "delete"
+            }
+          }
+        }
+      },
+      "oauth2-password": {
+        "type": "oauth2",
+        "flows": {
+          "password": {
+            "authorizationUrl": "http://authorize.url/",
+            "tokenUrl": "http://token.url/",
+            "scopes": {
+              "fake.add": "add",
+              "fake.edit": "edit",
+              "fake.delete": "delete"
+            }
+          }
+        }
+      },
+      "oauth2-implicit": {
+        "type": "oauth2",
+        "flows": {
+          "implicit": {
+            "authorizationUrl": "http://authorize.url/",
+            "scopes": {
+              "fake.add": "add",
+              "fake.edit": "edit",
+              "fake.delete": "delete"
+            }
+          }
+        }
       }
     }
   }
