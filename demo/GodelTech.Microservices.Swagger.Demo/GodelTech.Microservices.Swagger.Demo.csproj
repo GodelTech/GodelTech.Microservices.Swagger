@@ -10,6 +10,11 @@
 		<SonarQubeExclude>true</SonarQubeExclude>
 	</PropertyGroup>
 
+	<!-- Exclude the project from code coverage -->
+	<ItemGroup>
+		<AssemblyAttribute Include="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" />
+	</ItemGroup>
+
 	<ItemGroup>
 		<ProjectReference Include="..\..\src\GodelTech.Microservices.Swagger\GodelTech.Microservices.Swagger.csproj" />
 	</ItemGroup>
