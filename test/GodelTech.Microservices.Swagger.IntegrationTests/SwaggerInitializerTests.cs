@@ -67,7 +67,7 @@ namespace GodelTech.Microservices.Swagger.IntegrationTests
             // Act
             var result = await client.GetAsync(
                 new Uri(
-                    "/swagger/v1/swagger.json",
+                    "/swagger/v2/swagger.json",
                     UriKind.Relative
                 )
             );

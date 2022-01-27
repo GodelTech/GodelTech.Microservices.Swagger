@@ -28,7 +28,7 @@ namespace GodelTech.Microservices.Swagger.Demo
                 options =>
                 {
                     options.DocumentTitle = "Demo API";
-                    options.DocumentVersion = "v1";
+                    options.DocumentVersion = "v2";
                     options.AuthorizationUrl = new Uri("http://authorize.url");
                     options.TokenUrl = new Uri("http://token.url");
                     options.Scopes = new Dictionary<string, string>
