@@ -26,13 +26,13 @@
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 
 		<!-- SonarQube needs this -->
-		<ProjectGuid>{00000000-0000-0000-0000-000000000001}</ProjectGuid>
+		<ProjectGuid>{00000000-0000-0000-0000-000000000010}</ProjectGuid>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="GodelTech.Microservices.Core" Version="2.1.0" />
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
-		<PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.2.3" />
+		<PackageReference Include="GodelTech.Microservices.Core" Version="2.2.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.3.0" />
 
 		<!-- Source Link needs this -->
 		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />

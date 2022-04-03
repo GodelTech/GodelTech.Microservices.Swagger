@@ -82,7 +82,7 @@
         },
         "responses": {
           "201": {
-            "description": "Success",
+            "description": "Created",
             "content": {
               "text/plain": {
                 "schema": {
@@ -279,7 +279,7 @@
             }
           },
           "204": {
-            "description": "Success"
+            "description": "No Content"
           },
           "401": {
             "description": "Unauthorized"
