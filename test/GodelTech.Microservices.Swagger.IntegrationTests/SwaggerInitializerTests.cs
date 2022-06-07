@@ -79,5 +79,14 @@ namespace GodelTech.Microservices.Swagger.IntegrationTests
                 await result.Content.ReadAsStringAsync()
             );
         }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData("/")]
+        public async Task Configure_Redirect(string homePath)
+        {
+            // Arrange & Act & Assert
+            await Configure_CheckHtml(homePath);
+        }
     }
 }
