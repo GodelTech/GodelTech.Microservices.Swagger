@@ -40,6 +40,11 @@ namespace GodelTech.Microservices.Swagger
         {
             app.UseSwagger(ConfigureSwaggerOptions);
             app.UseSwaggerUI(ConfigureSwaggerUiOptions);
+
+            if (_options.RedirectHomePage)
+            {
+                app.AddSwaggerRedirectHomePage(ConfigureSwaggerUiOptions);
+            }
         }
 
         /// <summary>

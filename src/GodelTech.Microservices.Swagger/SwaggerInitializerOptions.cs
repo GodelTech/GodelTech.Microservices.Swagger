@@ -42,5 +42,10 @@ namespace GodelTech.Microservices.Swagger
                                // You can suppress the warning if the property is part of a Data Transfer Object (DTO) class.
         public IDictionary<string, string> Scopes { get; set; } = new Dictionary<string, string>();
 #pragma warning restore CA2227 // Collection properties should be read only
+
+        /// <summary>
+        /// If true, than api home page will be redirected to swagger UI page.
+        /// </summary>
+        public bool RedirectHomePage { get; set; } = true;
     }
 }
