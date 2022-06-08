@@ -28,8 +28,6 @@ namespace GodelTech.Microservices.Swagger.Extensions
                 swaggerUiOptionsConfigure?.Invoke(swaggerUiOptions);
             }
 
-            swaggerUiOptionsConfigure?.Invoke(swaggerUiOptions);
-
             app.UseEndpoints(
                 builder => builder.MapGet(
                     string.Empty,
