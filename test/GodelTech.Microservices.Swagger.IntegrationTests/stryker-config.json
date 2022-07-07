@@ -1,5 +1,0 @@
-{
-  "stryker-config": {
-    "project": "../../src/GodelTech.Microservices.Swagger/GodelTech.Microservices.Swagger.csproj"
-  }
-}
