@@ -1,4 +1,0 @@
-[*.{cs,vb}]
-
-# CA1014: Mark assemblies with CLSCompliantAttribute
-dotnet_diagnostic.CA1014.severity = none
