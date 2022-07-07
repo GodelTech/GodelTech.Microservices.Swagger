@@ -1,7 +1,6 @@
-﻿namespace GodelTech.Microservices.Swagger.Demo.Models.Fake
+﻿namespace GodelTech.Microservices.Swagger.Demo.Models.Fake;
+
+public class FakePostModel
 {
-    public class FakePostModel
-    {
-        public string Title { get; set; }
-    }
+    public string Title { get; set; }
 }

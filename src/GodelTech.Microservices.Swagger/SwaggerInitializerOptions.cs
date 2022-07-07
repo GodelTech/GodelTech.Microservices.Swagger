@@ -39,7 +39,7 @@ namespace GodelTech.Microservices.Swagger
         /// A map between the scope name and a short description for it.
         /// </summary>
 #pragma warning disable CA2227 // Collection properties should be read only
-                               // You can suppress the warning if the property is part of a Data Transfer Object (DTO) class.
+        // You can suppress the warning if the property is part of a Data Transfer Object (DTO) class.
         public IDictionary<string, string> Scopes { get; set; } = new Dictionary<string, string>();
 #pragma warning restore CA2227 // Collection properties should be read only
 
