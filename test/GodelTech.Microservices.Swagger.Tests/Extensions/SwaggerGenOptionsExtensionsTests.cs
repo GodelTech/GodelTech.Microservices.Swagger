@@ -8,358 +8,357 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Xunit;
 
-namespace GodelTech.Microservices.Swagger.Tests.Extensions
+namespace GodelTech.Microservices.Swagger.Tests.Extensions;
+
+public class SwaggerGenOptionsExtensionsTests
 {
-    public class SwaggerGenOptionsExtensionsTests
+    private const string AuthorizationUrlArgumentExceptionMessage = "AuthorizationUrl can't be null";
+    private const string TokenUrlArgumentExceptionMessage = "TokenUrl can't be null";
+    private const string ScopesArgumentExceptionMessage = "Scopes can't be null";
+
+    [Fact]
+    public void AddAuthHeaderFlowSecurityDefinition_Success()
     {
-        private const string AuthorizationUrlArgumentExceptionMessage = "AuthorizationUrl can't be null";
-        private const string TokenUrlArgumentExceptionMessage = "TokenUrl can't be null";
-        private const string ScopesArgumentExceptionMessage = "Scopes can't be null";
+        // Arrange
+        var options = new SwaggerGenOptions();
 
-        [Fact]
-        public void AddAuthHeaderFlowSecurityDefinition_Success()
+        var expectedOpenApiSecurityScheme = new OpenApiSecurityScheme
         {
-            // Arrange
-            var options = new SwaggerGenOptions();
+            Name = "Authorization",
+            Type = SecuritySchemeType.ApiKey,
+            In = ParameterLocation.Header,
+            Scheme = "Bearer",
+            BearerFormat = "JWT",
+            Description = "Standard Authorization header using the Bearer scheme. Example: \"bearer {token}\""
+        };
 
-            var expectedOpenApiSecurityScheme = new OpenApiSecurityScheme
+        // Act
+        options.AddAuthHeaderFlowSecurityDefinition();
+
+        // Assert
+        Assert.Single(options.SwaggerGeneratorOptions.SecuritySchemes);
+
+        var securityScheme = Assert.Contains(
+            OAuth2Security.OAuth2,
+            options.SwaggerGeneratorOptions.SecuritySchemes
+        );
+
+        securityScheme.Should().BeEquivalentTo(expectedOpenApiSecurityScheme);
+    }
+
+    [Fact]
+    public void AddAuthorizationCodeFlowSecurityDefinition_WhenSwaggerInitializerOptionsIsNull_ThrowsArgumentNullException()
+    {
+        // Arrange & Act & Assert
+        AssertExtensions.ArgumentNullException(
+            options => options.AddAuthorizationCodeFlowSecurityDefinition(null)
+        );
+    }
+
+    [Fact]
+    public void AddAuthorizationCodeFlowSecurityDefinition_WhenAuthorizationUrlIsNull_ThrowsArgumentException()
+    {
+        // Arrange & Act & Assert
+        AssertExtensions.ArgumentException(
+            SwaggerInitializerOptionsHelpers.CreateWithNullAuthorizationUrl(),
+            (options, swaggerInitializerOptions) => options.AddAuthorizationCodeFlowSecurityDefinition(swaggerInitializerOptions),
+            AuthorizationUrlArgumentExceptionMessage
+        );
+    }
+
+    [Fact]
+    public void AddAuthorizationCodeFlowSecurityDefinition_WhenTokenUrlIsNull_ThrowsArgumentException()
+    {
+        // Arrange & Act & Assert
+        AssertExtensions.ArgumentException(
+            SwaggerInitializerOptionsHelpers.CreateWithNullTokenUrl(),
+            (options, swaggerInitializerOptions) => options.AddAuthorizationCodeFlowSecurityDefinition(swaggerInitializerOptions),
+            TokenUrlArgumentExceptionMessage
+        );
+    }
+
+    [Fact]
+    public void AddAuthorizationCodeFlowSecurityDefinition_WhenScopesIsNull_ThrowsArgumentException()
+    {
+        // Arrange & Act & Assert
+        AssertExtensions.ArgumentException(
+            SwaggerInitializerOptionsHelpers.CreateWithNullScopes(),
+            (options, swaggerInitializerOptions) => options.AddAuthorizationCodeFlowSecurityDefinition(swaggerInitializerOptions),
+            ScopesArgumentExceptionMessage
+        );
+    }
+
+    [Fact]
+    public void AddAuthorizationCodeFlowSecurityDefinition_Success()
+    {
+        // Arrange
+        var options = new SwaggerGenOptions();
+        var initializerOptions = new SwaggerInitializerOptions
+        {
+            AuthorizationUrl = new Uri("http://test.dev"),
+            TokenUrl = new Uri("http://test.dev"),
+            Scopes = new Dictionary<string, string>
             {
-                Name = "Authorization",
-                Type = SecuritySchemeType.ApiKey,
-                In = ParameterLocation.Header,
-                Scheme = "Bearer",
-                BearerFormat = "JWT",
-                Description = "Standard Authorization header using the Bearer scheme. Example: \"bearer {token}\""
-            };
+                {"TestScopeKey", "TestScopeValue"}
+            }
+        };
 
-            // Act
-            options.AddAuthHeaderFlowSecurityDefinition();
-
-            // Assert
-            Assert.Single(options.SwaggerGeneratorOptions.SecuritySchemes);
-
-            var securityScheme = Assert.Contains(
-                OAuth2Security.OAuth2,
-                options.SwaggerGeneratorOptions.SecuritySchemes
-            );
-
-            securityScheme.Should().BeEquivalentTo(expectedOpenApiSecurityScheme);
-        }
-
-        [Fact]
-        public void AddAuthorizationCodeFlowSecurityDefinition_WhenSwaggerInitializerOptionsIsNull_ThrowsArgumentNullException()
+        var expectedOpenApiSecurityScheme = new OpenApiSecurityScheme
         {
-            // Arrange & Act & Assert
-            AssertExtensions.ArgumentNullException(
-                options => options.AddAuthorizationCodeFlowSecurityDefinition(null)
-            );
-        }
-
-        [Fact]
-        public void AddAuthorizationCodeFlowSecurityDefinition_WhenAuthorizationUrlIsNull_ThrowsArgumentException()
-        {
-            // Arrange & Act & Assert
-            AssertExtensions.ArgumentException(
-                SwaggerInitializerOptionsHelpers.CreateWithNullAuthorizationUrl(),
-                (options, swaggerInitializerOptions) => options.AddAuthorizationCodeFlowSecurityDefinition(swaggerInitializerOptions),
-                AuthorizationUrlArgumentExceptionMessage
-            );
-        }
-
-        [Fact]
-        public void AddAuthorizationCodeFlowSecurityDefinition_WhenTokenUrlIsNull_ThrowsArgumentException()
-        {
-            // Arrange & Act & Assert
-            AssertExtensions.ArgumentException(
-                SwaggerInitializerOptionsHelpers.CreateWithNullTokenUrl(),
-                (options, swaggerInitializerOptions) => options.AddAuthorizationCodeFlowSecurityDefinition(swaggerInitializerOptions),
-                TokenUrlArgumentExceptionMessage
-            );
-        }
-
-        [Fact]
-        public void AddAuthorizationCodeFlowSecurityDefinition_WhenScopesIsNull_ThrowsArgumentException()
-        {
-            // Arrange & Act & Assert
-            AssertExtensions.ArgumentException(
-                SwaggerInitializerOptionsHelpers.CreateWithNullScopes(),
-                (options, swaggerInitializerOptions) => options.AddAuthorizationCodeFlowSecurityDefinition(swaggerInitializerOptions),
-                ScopesArgumentExceptionMessage
-            );
-        }
-
-        [Fact]
-        public void AddAuthorizationCodeFlowSecurityDefinition_Success()
-        {
-            // Arrange
-            var options = new SwaggerGenOptions();
-            var initializerOptions = new SwaggerInitializerOptions
+            Type = SecuritySchemeType.OAuth2,
+            Flows = new OpenApiOAuthFlows
             {
-                AuthorizationUrl = new Uri("http://test.dev"),
-                TokenUrl = new Uri("http://test.dev"),
-                Scopes = new Dictionary<string, string>
+                AuthorizationCode = new OpenApiOAuthFlow
                 {
-                    {"TestScopeKey", "TestScopeValue"}
+                    AuthorizationUrl = initializerOptions.AuthorizationUrl,
+                    TokenUrl = initializerOptions.TokenUrl,
+                    Scopes = initializerOptions.Scopes
                 }
-            };
+            }
+        };
 
-            var expectedOpenApiSecurityScheme = new OpenApiSecurityScheme
+        // Act
+        options.AddAuthorizationCodeFlowSecurityDefinition(initializerOptions);
+
+        // Assert
+        Assert.Single(options.SwaggerGeneratorOptions.SecuritySchemes);
+
+        var securityScheme = Assert.Contains(
+            OAuth2Security.AuthorizationCode,
+            options.SwaggerGeneratorOptions.SecuritySchemes
+        );
+
+        securityScheme.Should().BeEquivalentTo(expectedOpenApiSecurityScheme);
+    }
+
+    [Fact]
+    public void AddClientCredentialsFlowSecurityDefinition_WhenSwaggerInitializerOptionsIsNull_ThrowsArgumentNullException()
+    {
+        // Arrange & Act & Assert
+        AssertExtensions.ArgumentNullException(
+            options => options.AddClientCredentialsFlowSecurityDefinition(null)
+        );
+    }
+
+    [Fact]
+    public void AddClientCredentialsFlowSecurityDefinition_WhenTokenUrlIsNull_ThrowsArgumentException()
+    {
+        // Arrange & Act & Assert
+        AssertExtensions.ArgumentException(
+            SwaggerInitializerOptionsHelpers.CreateWithNullTokenUrl(),
+            (options, swaggerInitializerOptions) => options.AddClientCredentialsFlowSecurityDefinition(swaggerInitializerOptions),
+            TokenUrlArgumentExceptionMessage
+        );
+    }
+
+    [Fact]
+    public void AddClientCredentialsFlowSecurityDefinition_WhenScopesIsNull_ThrowsArgumentException()
+    {
+        // Arrange & Act & Assert
+        AssertExtensions.ArgumentException(
+            SwaggerInitializerOptionsHelpers.CreateWithNullScopes(),
+            (options, swaggerInitializerOptions) => options.AddClientCredentialsFlowSecurityDefinition(swaggerInitializerOptions),
+            ScopesArgumentExceptionMessage
+        );
+    }
+
+    [Fact]
+    public void AddClientCredentialsFlowSecurityDefinition_Success()
+    {
+        // Arrange
+        var options = new SwaggerGenOptions();
+        var initializerOptions = new SwaggerInitializerOptions
+        {
+            AuthorizationUrl = new Uri("http://test.dev"),
+            TokenUrl = new Uri("http://test.dev"),
+            Scopes = new Dictionary<string, string>
             {
-                Type = SecuritySchemeType.OAuth2,
-                Flows = new OpenApiOAuthFlows
-                {
-                    AuthorizationCode = new OpenApiOAuthFlow
-                    {
-                        AuthorizationUrl = initializerOptions.AuthorizationUrl,
-                        TokenUrl = initializerOptions.TokenUrl,
-                        Scopes = initializerOptions.Scopes
-                    }
-                }
-            };
+                {"TestScopeKey", "TestScopeValue"}
+            }
+        };
 
-            // Act
-            options.AddAuthorizationCodeFlowSecurityDefinition(initializerOptions);
-
-            // Assert
-            Assert.Single(options.SwaggerGeneratorOptions.SecuritySchemes);
-
-            var securityScheme = Assert.Contains(
-                OAuth2Security.AuthorizationCode,
-                options.SwaggerGeneratorOptions.SecuritySchemes
-            );
-
-            securityScheme.Should().BeEquivalentTo(expectedOpenApiSecurityScheme);
-        }
-
-        [Fact]
-        public void AddClientCredentialsFlowSecurityDefinition_WhenSwaggerInitializerOptionsIsNull_ThrowsArgumentNullException()
+        var expectedOpenApiSecurityScheme = new OpenApiSecurityScheme
         {
-            // Arrange & Act & Assert
-            AssertExtensions.ArgumentNullException(
-                options => options.AddClientCredentialsFlowSecurityDefinition(null)
-            );
-        }
-        
-        [Fact]
-        public void AddClientCredentialsFlowSecurityDefinition_WhenTokenUrlIsNull_ThrowsArgumentException()
-        {
-            // Arrange & Act & Assert
-            AssertExtensions.ArgumentException(
-                SwaggerInitializerOptionsHelpers.CreateWithNullTokenUrl(),
-                (options, swaggerInitializerOptions) => options.AddClientCredentialsFlowSecurityDefinition(swaggerInitializerOptions),
-                TokenUrlArgumentExceptionMessage
-            );
-        }
-
-        [Fact]
-        public void AddClientCredentialsFlowSecurityDefinition_WhenScopesIsNull_ThrowsArgumentException()
-        {
-            // Arrange & Act & Assert
-            AssertExtensions.ArgumentException(
-                SwaggerInitializerOptionsHelpers.CreateWithNullScopes(),
-                (options, swaggerInitializerOptions) => options.AddClientCredentialsFlowSecurityDefinition(swaggerInitializerOptions),
-                ScopesArgumentExceptionMessage
-            );
-        }
-
-        [Fact]
-        public void AddClientCredentialsFlowSecurityDefinition_Success()
-        {
-            // Arrange
-            var options = new SwaggerGenOptions();
-            var initializerOptions = new SwaggerInitializerOptions
+            Type = SecuritySchemeType.OAuth2,
+            Flows = new OpenApiOAuthFlows
             {
-                AuthorizationUrl = new Uri("http://test.dev"),
-                TokenUrl = new Uri("http://test.dev"),
-                Scopes = new Dictionary<string, string>
+                ClientCredentials = new OpenApiOAuthFlow
                 {
-                    {"TestScopeKey", "TestScopeValue"}
+                    TokenUrl = initializerOptions.TokenUrl,
+                    Scopes = initializerOptions.Scopes
                 }
-            };
+            }
+        };
 
-            var expectedOpenApiSecurityScheme = new OpenApiSecurityScheme
+        // Act
+        options.AddClientCredentialsFlowSecurityDefinition(initializerOptions);
+
+        // Assert
+        Assert.Single(options.SwaggerGeneratorOptions.SecuritySchemes);
+
+        var securityScheme = Assert.Contains(
+            OAuth2Security.ClientCredentials,
+            options.SwaggerGeneratorOptions.SecuritySchemes
+        );
+
+        securityScheme.Should().BeEquivalentTo(expectedOpenApiSecurityScheme);
+    }
+
+    [Fact]
+    public void AddResourceOwnerFlowSecurityDefinition_WhenSwaggerInitializerOptionsIsNull_ThrowsArgumentNullException()
+    {
+        // Arrange & Act & Assert
+        AssertExtensions.ArgumentNullException(
+            options => options.AddResourceOwnerFlowSecurityDefinition(null)
+        );
+    }
+
+    [Fact]
+    public void AddResourceOwnerFlowSecurityDefinition_WhenAuthorizationUrlIsNull_ThrowsArgumentException()
+    {
+        // Arrange & Act & Assert
+        AssertExtensions.ArgumentException(
+            SwaggerInitializerOptionsHelpers.CreateWithNullAuthorizationUrl(),
+            (options, swaggerInitializerOptions) => options.AddResourceOwnerFlowSecurityDefinition(swaggerInitializerOptions),
+            AuthorizationUrlArgumentExceptionMessage
+        );
+    }
+
+    [Fact]
+    public void AddResourceOwnerFlowSecurityDefinition_WhenTokenUrlIsNull_ThrowsArgumentException()
+    {
+        // Arrange & Act & Assert
+        AssertExtensions.ArgumentException(
+            SwaggerInitializerOptionsHelpers.CreateWithNullTokenUrl(),
+            (options, swaggerInitializerOptions) => options.AddResourceOwnerFlowSecurityDefinition(swaggerInitializerOptions),
+            TokenUrlArgumentExceptionMessage
+        );
+    }
+
+    [Fact]
+    public void AddResourceOwnerFlowSecurityDefinition_WhenScopesIsNull_ThrowsArgumentException()
+    {
+        // Arrange & Act & Assert
+        AssertExtensions.ArgumentException(
+            SwaggerInitializerOptionsHelpers.CreateWithNullScopes(),
+            (options, swaggerInitializerOptions) => options.AddResourceOwnerFlowSecurityDefinition(swaggerInitializerOptions),
+            ScopesArgumentExceptionMessage
+        );
+    }
+
+    [Fact]
+    public void AddResourceOwnerFlowSecurityDefinition_Success()
+    {
+        // Arrange
+        var options = new SwaggerGenOptions();
+        var initializerOptions = new SwaggerInitializerOptions
+        {
+            AuthorizationUrl = new Uri("http://test.dev"),
+            TokenUrl = new Uri("http://test.dev"),
+            Scopes = new Dictionary<string, string>
             {
-                Type = SecuritySchemeType.OAuth2,
-                Flows = new OpenApiOAuthFlows
-                {
-                    ClientCredentials = new OpenApiOAuthFlow
-                    {
-                        TokenUrl = initializerOptions.TokenUrl,
-                        Scopes = initializerOptions.Scopes
-                    }
-                }
-            };
+                {"TestScopeKey", "TestScopeValue"}
+            }
+        };
 
-            // Act
-            options.AddClientCredentialsFlowSecurityDefinition(initializerOptions);
-
-            // Assert
-            Assert.Single(options.SwaggerGeneratorOptions.SecuritySchemes);
-
-            var securityScheme = Assert.Contains(
-                OAuth2Security.ClientCredentials,
-                options.SwaggerGeneratorOptions.SecuritySchemes
-            );
-
-            securityScheme.Should().BeEquivalentTo(expectedOpenApiSecurityScheme);
-        }
-
-        [Fact]
-        public void AddResourceOwnerFlowSecurityDefinition_WhenSwaggerInitializerOptionsIsNull_ThrowsArgumentNullException()
+        var expectedOpenApiSecurityScheme = new OpenApiSecurityScheme
         {
-            // Arrange & Act & Assert
-            AssertExtensions.ArgumentNullException(
-                options => options.AddResourceOwnerFlowSecurityDefinition(null)
-            );
-        }
-
-        [Fact]
-        public void AddResourceOwnerFlowSecurityDefinition_WhenAuthorizationUrlIsNull_ThrowsArgumentException()
-        {
-            // Arrange & Act & Assert
-            AssertExtensions.ArgumentException(
-                SwaggerInitializerOptionsHelpers.CreateWithNullAuthorizationUrl(),
-                (options, swaggerInitializerOptions) => options.AddResourceOwnerFlowSecurityDefinition(swaggerInitializerOptions),
-                AuthorizationUrlArgumentExceptionMessage
-            );
-        }
-
-        [Fact]
-        public void AddResourceOwnerFlowSecurityDefinition_WhenTokenUrlIsNull_ThrowsArgumentException()
-        {
-            // Arrange & Act & Assert
-            AssertExtensions.ArgumentException(
-                SwaggerInitializerOptionsHelpers.CreateWithNullTokenUrl(),
-                (options, swaggerInitializerOptions) => options.AddResourceOwnerFlowSecurityDefinition(swaggerInitializerOptions),
-                TokenUrlArgumentExceptionMessage
-            );
-        }
-
-        [Fact]
-        public void AddResourceOwnerFlowSecurityDefinition_WhenScopesIsNull_ThrowsArgumentException()
-        {
-            // Arrange & Act & Assert
-            AssertExtensions.ArgumentException(
-                SwaggerInitializerOptionsHelpers.CreateWithNullScopes(),
-                (options, swaggerInitializerOptions) => options.AddResourceOwnerFlowSecurityDefinition(swaggerInitializerOptions),
-                ScopesArgumentExceptionMessage
-            );
-        }
-
-        [Fact]
-        public void AddResourceOwnerFlowSecurityDefinition_Success()
-        {
-            // Arrange
-            var options = new SwaggerGenOptions();
-            var initializerOptions = new SwaggerInitializerOptions
+            Type = SecuritySchemeType.OAuth2,
+            Flows = new OpenApiOAuthFlows
             {
-                AuthorizationUrl = new Uri("http://test.dev"),
-                TokenUrl = new Uri("http://test.dev"),
-                Scopes = new Dictionary<string, string>
+                Password = new OpenApiOAuthFlow
                 {
-                    {"TestScopeKey", "TestScopeValue"}
+                    AuthorizationUrl = initializerOptions.AuthorizationUrl,
+                    TokenUrl = initializerOptions.TokenUrl,
+                    Scopes = initializerOptions.Scopes
                 }
-            };
+            }
+        };
 
-            var expectedOpenApiSecurityScheme = new OpenApiSecurityScheme
+        // Act
+        options.AddResourceOwnerFlowSecurityDefinition(initializerOptions);
+
+        // Assert
+        Assert.Single(options.SwaggerGeneratorOptions.SecuritySchemes);
+
+        var securityScheme = Assert.Contains(
+            OAuth2Security.ResourceOwnerPasswordCredentials,
+            options.SwaggerGeneratorOptions.SecuritySchemes
+        );
+
+        securityScheme.Should().BeEquivalentTo(expectedOpenApiSecurityScheme);
+    }
+
+    [Fact]
+    public void AddImplicitFlowSecurityDefinition_WhenSwaggerInitializerOptionsIsNull_ThrowsArgumentNullException()
+    {
+        // Arrange & Act & Assert
+        AssertExtensions.ArgumentNullException(
+            options => options.AddImplicitFlowSecurityDefinition(null)
+        );
+    }
+
+    [Fact]
+    public void AddImplicitFlowSecurityDefinition_WhenAuthorizationUrlIsNull_ThrowsArgumentException()
+    {
+        // Arrange & Act & Assert
+        AssertExtensions.ArgumentException(
+            SwaggerInitializerOptionsHelpers.CreateWithNullAuthorizationUrl(),
+            (options, swaggerInitializerOptions) => options.AddImplicitFlowSecurityDefinition(swaggerInitializerOptions),
+            AuthorizationUrlArgumentExceptionMessage
+        );
+    }
+
+    [Fact]
+    public void AddImplicitFlowSecurityDefinition_WhenScopesIsNull_ThrowsArgumentException()
+    {
+        // Arrange & Act & Assert
+        AssertExtensions.ArgumentException(
+            SwaggerInitializerOptionsHelpers.CreateWithNullScopes(),
+            (options, swaggerInitializerOptions) => options.AddImplicitFlowSecurityDefinition(swaggerInitializerOptions),
+            ScopesArgumentExceptionMessage
+        );
+    }
+
+    [Fact]
+    public void AddImplicitFlowSecurityDefinition_Success()
+    {
+        // Arrange
+        var options = new SwaggerGenOptions();
+        var initializerOptions = new SwaggerInitializerOptions
+        {
+            AuthorizationUrl = new Uri("http://test.dev"),
+            TokenUrl = new Uri("http://test.dev"),
+            Scopes = new Dictionary<string, string>
             {
-                Type = SecuritySchemeType.OAuth2,
-                Flows = new OpenApiOAuthFlows
-                {
-                    Password = new OpenApiOAuthFlow
-                    {
-                        AuthorizationUrl = initializerOptions.AuthorizationUrl,
-                        TokenUrl = initializerOptions.TokenUrl,
-                        Scopes = initializerOptions.Scopes
-                    }
-                }
-            };
+                {"TestScopeKey", "TestScopeValue"}
+            }
+        };
 
-            // Act
-            options.AddResourceOwnerFlowSecurityDefinition(initializerOptions);
-
-            // Assert
-            Assert.Single(options.SwaggerGeneratorOptions.SecuritySchemes);
-
-            var securityScheme = Assert.Contains(
-                OAuth2Security.ResourceOwnerPasswordCredentials,
-                options.SwaggerGeneratorOptions.SecuritySchemes
-            );
-
-            securityScheme.Should().BeEquivalentTo(expectedOpenApiSecurityScheme);
-        }
-
-        [Fact]
-        public void AddImplicitFlowSecurityDefinition_WhenSwaggerInitializerOptionsIsNull_ThrowsArgumentNullException()
+        var expectedOpenApiSecurityScheme = new OpenApiSecurityScheme
         {
-            // Arrange & Act & Assert
-            AssertExtensions.ArgumentNullException(
-                options => options.AddImplicitFlowSecurityDefinition(null)
-            );
-        }
-
-        [Fact]
-        public void AddImplicitFlowSecurityDefinition_WhenAuthorizationUrlIsNull_ThrowsArgumentException()
-        {
-            // Arrange & Act & Assert
-            AssertExtensions.ArgumentException(
-                SwaggerInitializerOptionsHelpers.CreateWithNullAuthorizationUrl(),
-                (options, swaggerInitializerOptions) => options.AddImplicitFlowSecurityDefinition(swaggerInitializerOptions),
-                AuthorizationUrlArgumentExceptionMessage
-            );
-        }
-        
-        [Fact]
-        public void AddImplicitFlowSecurityDefinition_WhenScopesIsNull_ThrowsArgumentException()
-        {
-            // Arrange & Act & Assert
-            AssertExtensions.ArgumentException(
-                SwaggerInitializerOptionsHelpers.CreateWithNullScopes(),
-                (options, swaggerInitializerOptions) => options.AddImplicitFlowSecurityDefinition(swaggerInitializerOptions),
-                ScopesArgumentExceptionMessage
-            );
-        }
-
-        [Fact]
-        public void AddImplicitFlowSecurityDefinition_Success()
-        {
-            // Arrange
-            var options = new SwaggerGenOptions();
-            var initializerOptions = new SwaggerInitializerOptions
+            Type = SecuritySchemeType.OAuth2,
+            Flows = new OpenApiOAuthFlows
             {
-                AuthorizationUrl = new Uri("http://test.dev"),
-                TokenUrl = new Uri("http://test.dev"),
-                Scopes = new Dictionary<string, string>
+                Implicit = new OpenApiOAuthFlow
                 {
-                    {"TestScopeKey", "TestScopeValue"}
+                    AuthorizationUrl = initializerOptions.AuthorizationUrl,
+                    Scopes = initializerOptions.Scopes
                 }
-            };
+            }
+        };
 
-            var expectedOpenApiSecurityScheme = new OpenApiSecurityScheme
-            {
-                Type = SecuritySchemeType.OAuth2,
-                Flows = new OpenApiOAuthFlows
-                {
-                    Implicit = new OpenApiOAuthFlow
-                    {
-                        AuthorizationUrl = initializerOptions.AuthorizationUrl,
-                        Scopes = initializerOptions.Scopes
-                    }
-                }
-            };
+        // Act
+        options.AddImplicitFlowSecurityDefinition(initializerOptions);
 
-            // Act
-            options.AddImplicitFlowSecurityDefinition(initializerOptions);
+        // Assert
+        Assert.Single(options.SwaggerGeneratorOptions.SecuritySchemes);
 
-            // Assert
-            Assert.Single(options.SwaggerGeneratorOptions.SecuritySchemes);
+        var securityScheme = Assert.Contains(
+            OAuth2Security.Implicit,
+            options.SwaggerGeneratorOptions.SecuritySchemes
+        );
 
-            var securityScheme = Assert.Contains(
-                OAuth2Security.Implicit,
-                options.SwaggerGeneratorOptions.SecuritySchemes
-            );
-
-            securityScheme.Should().BeEquivalentTo(expectedOpenApiSecurityScheme);
-        }
+        securityScheme.Should().BeEquivalentTo(expectedOpenApiSecurityScheme);
     }
 }

@@ -4,89 +4,88 @@ using System.Net;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace GodelTech.Microservices.Swagger.IntegrationTests
+namespace GodelTech.Microservices.Swagger.IntegrationTests;
+
+public sealed class SwaggerInitializerTests : IDisposable
 {
-    public sealed class SwaggerInitializerTests : IDisposable
+    private readonly AppTestFixture _fixture;
+
+    public SwaggerInitializerTests()
     {
-        private readonly AppTestFixture _fixture;
+        _fixture = new AppTestFixture();
+    }
 
-        public SwaggerInitializerTests()
-        {
-            _fixture = new AppTestFixture();
-        }
+    public void Dispose()
+    {
+        _fixture?.Dispose();
+    }
 
-        public void Dispose()
-        {
-            _fixture?.Dispose();
-        }
+    [Theory]
+    [InlineData("/swagger")]
+    [InlineData("/swagger/index.html")]
+    public async Task Configure_CheckHtml(string path)
+    {
+        // Arrange
+        var client = _fixture.CreateClient();
 
-        [Theory]
-        [InlineData("/swagger")]
-        [InlineData("/swagger/index.html")]
-        public async Task Configure_CheckHtml(string path)
-        {
-            // Arrange
-            var client = _fixture.CreateClient();
+        var expectedResultValue = await File.ReadAllTextAsync("Documents/swaggerHtml.txt");
+        expectedResultValue = expectedResultValue.Replace(
+            Environment.NewLine,
+            "\n",
+            StringComparison.InvariantCulture
+        );
 
-            var expectedResultValue = await File.ReadAllTextAsync("Documents/swaggerHtml.txt");
-            expectedResultValue = expectedResultValue.Replace(
-                Environment.NewLine,
-                "\n",
-                StringComparison.InvariantCulture
-            );
+        // Act
+        var result = await client.GetAsync(
+            new Uri(
+                path,
+                UriKind.Relative
+            )
+        );
 
-            // Act
-            var result = await client.GetAsync(
-                new Uri(
-                    path,
-                    UriKind.Relative
-                )
-            );
+        // Assert
+        Assert.Equal(HttpStatusCode.OK, result.StatusCode);
+        Assert.Equal(
+            expectedResultValue,
+            await result.Content.ReadAsStringAsync()
+        );
+    }
 
-            // Assert
-            Assert.Equal(HttpStatusCode.OK, result.StatusCode);
-            Assert.Equal(
-                expectedResultValue,
-                await result.Content.ReadAsStringAsync()
-            );
-        }
+    [Fact]
+    public async Task Configure_CheckJson()
+    {
+        // Arrange
+        var client = _fixture.CreateClient();
 
-        [Fact]
-        public async Task Configure_CheckJson()
-        {
-            // Arrange
-            var client = _fixture.CreateClient();
+        var expectedResultValue = await File.ReadAllTextAsync("Documents/swaggerJson.txt");
+        expectedResultValue = expectedResultValue.Replace(
+            Environment.NewLine,
+            "\n",
+            StringComparison.InvariantCulture
+        );
 
-            var expectedResultValue = await File.ReadAllTextAsync("Documents/swaggerJson.txt");
-            expectedResultValue = expectedResultValue.Replace(
-                Environment.NewLine,
-                "\n",
-                StringComparison.InvariantCulture
-            );
+        // Act
+        var result = await client.GetAsync(
+            new Uri(
+                "/swagger/v2/swagger.json",
+                UriKind.Relative
+            )
+        );
 
-            // Act
-            var result = await client.GetAsync(
-                new Uri(
-                    "/swagger/v2/swagger.json",
-                    UriKind.Relative
-                )
-            );
+        // Assert
+        Assert.Equal(HttpStatusCode.OK, result.StatusCode);
+        Assert.Equal(
+            expectedResultValue,
+            await result.Content.ReadAsStringAsync()
+        );
+    }
 
-            // Assert
-            Assert.Equal(HttpStatusCode.OK, result.StatusCode);
-            Assert.Equal(
-                expectedResultValue,
-                await result.Content.ReadAsStringAsync()
-            );
-        }
-
-        [Theory]
-        [InlineData("")]
-        [InlineData("/")]
-        public async Task Configure_Redirect(string homePath)
-        {
-            // Arrange & Act & Assert
-            await Configure_CheckHtml(homePath);
-        }
+    [Theory]
+    [InlineData("")]
+    [InlineData("/")]
+    public async Task Configure_Redirect(string homePath)
+    {
+        // Arrange & Act & Assert
+        await Configure_CheckHtml(homePath);
     }
 }
