@@ -40,7 +40,11 @@ namespace GodelTech.Microservices.Swagger
         {
             app.UseSwagger(ConfigureSwaggerOptions);
             app.UseSwaggerUI(ConfigureSwaggerUiOptions);
+        }
 
+        /// <inheritdoc />
+        public virtual void ConfigureEndpoints(IApplicationBuilder app, IWebHostEnvironment env)
+        {
             if (_options.RedirectHomePage)
             {
                 app.AddSwaggerRedirectHomePage(ConfigureSwaggerUiOptions);
