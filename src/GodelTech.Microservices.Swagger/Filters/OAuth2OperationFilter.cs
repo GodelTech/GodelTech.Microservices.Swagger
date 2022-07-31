@@ -22,6 +22,8 @@ namespace GodelTech.Microservices.Swagger.Filters
             if (operation == null) throw new ArgumentNullException(nameof(operation));
             if (context == null) throw new ArgumentNullException(nameof(context));
 
+            if (context.MethodInfo.GetCustomAttributes(true).Any(x => x is AllowAnonymousAttribute)) return;
+
             var authorizeAttributes = new List<AuthorizeAttribute>();
             var swaggerSecurityAttributes = new List<SwaggerSecurityAttribute>();
 

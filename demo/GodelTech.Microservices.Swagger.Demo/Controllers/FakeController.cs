@@ -30,6 +30,7 @@ public class FakeController : ControllerBase
         return Ok(Items);
     }
 
+    [AllowAnonymous]
     [HttpGet("{id:int}")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(FakeModel), StatusCodes.Status200OK)]

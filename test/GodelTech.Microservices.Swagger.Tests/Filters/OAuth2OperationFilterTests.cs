@@ -84,6 +84,34 @@ public class OAuth2OperationFilterTests
     }
 
     [Fact]
+    public void Apply_WhenAllowAnonymousAttribute_Success()
+    {
+        // Arrange
+        var method = typeof(FakeController).GetMethod("Get");
+
+        var context = new OperationFilterContext(
+            new ApiDescription(),
+            new SchemaGenerator(
+                new SchemaGeneratorOptions(),
+                new JsonSerializerDataContractResolver(
+                    new JsonSerializerOptions()
+                )
+            ),
+            new SchemaRepository(),
+            method
+        );
+
+        var operation = new OpenApiOperation();
+
+        // Act
+        _filter.Apply(operation, context);
+
+        // Assert
+        Assert.Empty(operation.Responses);
+        Assert.Empty(operation.Security);
+    }
+
+    [Fact]
     public void Apply_Success()
     {
         // Arrange

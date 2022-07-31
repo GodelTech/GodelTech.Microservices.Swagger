@@ -185,23 +185,8 @@
                 }
               }
             }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
           }
-        },
-        "security": [
-          {
-            "oauth2": [ ],
-            "oauth2-authorization-code": [ ],
-            "oauth2-client-credentials": [ ],
-            "oauth2-password": [ ],
-            "oauth2-implicit": [ ]
-          }
-        ]
+        }
       },
       "put": {
         "tags": [
