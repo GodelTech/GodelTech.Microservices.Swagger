@@ -20,6 +20,8 @@ namespace GodelTech.Microservices.Swagger
     {
         private readonly SwaggerInitializerOptions _options = new SwaggerInitializerOptions();
 
+        private SwaggerUIOptions _swaggerUIOptions = new SwaggerUIOptions();
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SwaggerInitializer"/> class.
         /// </summary>
@@ -47,7 +49,7 @@ namespace GodelTech.Microservices.Swagger
         {
             if (_options.RedirectHomePage)
             {
-                app.AddSwaggerRedirectHomePage(ConfigureSwaggerUiOptions);
+                app.AddSwaggerRedirectHomePage(_swaggerUIOptions);
             }
         }
 
@@ -113,6 +115,8 @@ namespace GodelTech.Microservices.Swagger
         protected virtual void ConfigureSwaggerUiOptions(SwaggerUIOptions options)
         {
             options.SwaggerEndpoint($"/swagger/{_options.DocumentVersion}/swagger.json", _options.DocumentVersion);
+
+            _swaggerUIOptions = options;
         }
     }
 }
