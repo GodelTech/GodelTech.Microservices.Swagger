@@ -359,6 +359,82 @@
           }
         ]
       }
+    },
+    "/inheritedFakes/allowAnonymous": {
+      "get": {
+        "tags": [
+          "InheritedFake"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/inheritedFakes/authorize": {
+      "get": {
+        "tags": [
+          "InheritedFake"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [ ],
+            "oauth2-authorization-code": [ ],
+            "oauth2-client-credentials": [ ],
+            "oauth2-password": [ ],
+            "oauth2-implicit": [ ]
+          }
+        ]
+      }
+    },
+    "/inheritedFakes/swaggerSecurity": {
+      "get": {
+        "tags": [
+          "InheritedFake"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [
+              "fake.add"
+            ],
+            "oauth2-authorization-code": [
+              "fake.add"
+            ],
+            "oauth2-client-credentials": [
+              "fake.add"
+            ],
+            "oauth2-password": [
+              "fake.add"
+            ],
+            "oauth2-implicit": [
+              "fake.add"
+            ]
+          }
+        ]
+      }
     }
   },
   "components": {
@@ -440,8 +516,8 @@
         "type": "oauth2",
         "flows": {
           "authorizationCode": {
-            "authorizationUrl": "http://authorize.url/",
-            "tokenUrl": "http://token.url/",
+            "authorizationUrl": "https://localhost/",
+            "tokenUrl": "https://localhost/token",
             "scopes": {
               "fake.add": "add",
               "fake.edit": "edit",
@@ -454,7 +530,7 @@
         "type": "oauth2",
         "flows": {
           "clientCredentials": {
-            "tokenUrl": "http://token.url/",
+            "tokenUrl": "https://localhost/token",
             "scopes": {
               "fake.add": "add",
               "fake.edit": "edit",
@@ -467,8 +543,8 @@
         "type": "oauth2",
         "flows": {
           "password": {
-            "authorizationUrl": "http://authorize.url/",
-            "tokenUrl": "http://token.url/",
+            "authorizationUrl": "https://localhost/",
+            "tokenUrl": "https://localhost/token",
             "scopes": {
               "fake.add": "add",
               "fake.edit": "edit",
@@ -481,7 +557,7 @@
         "type": "oauth2",
         "flows": {
           "implicit": {
-            "authorizationUrl": "http://authorize.url/",
+            "authorizationUrl": "https://localhost/",
             "scopes": {
               "fake.add": "add",
               "fake.edit": "edit",
