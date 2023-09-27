@@ -19,8 +19,19 @@ public sealed class OAuth2OperationFilterTests : IDisposable
         _fixture?.Dispose();
     }
 
-    [Fact]
-    public async Task Apply_WhenInheritedAttribute_AllowAnonymous()
+    [Theory]
+    [InlineData("/fakes", HttpStatusCode.Unauthorized)]
+    [InlineData("/fakes/1", HttpStatusCode.OK)]
+    [InlineData("/others/authorize", HttpStatusCode.Unauthorized)]
+    [InlineData("/others/inherited/authorize", HttpStatusCode.Unauthorized)]
+    [InlineData("/inheritedFakes/allowAnonymous", HttpStatusCode.OK)]
+    [InlineData("/inheritedFakes/override/allowAnonymous", HttpStatusCode.OK)]
+    [InlineData("/inheritedFakes/authorize", HttpStatusCode.Unauthorized)]
+    [InlineData("/inheritedFakes/authorizeWithSwaggerSecurity", HttpStatusCode.Unauthorized)]
+    [InlineData("/inheritedFakes/swaggerSecurity", HttpStatusCode.Unauthorized)]
+    public async Task Apply_WhenInheritedAttribute_AllowAnonymous(
+        string path,
+        HttpStatusCode expectedStatusCode)
     {
         // Arrange
         var client = _fixture.CreateClient();
@@ -28,84 +39,12 @@ public sealed class OAuth2OperationFilterTests : IDisposable
         // Act
         var result = await client.GetAsync(
             new Uri(
-                "/inheritedFakes/allowAnonymous",
+                path,
                 UriKind.Relative
             )
         );
 
         // Assert
-        Assert.Equal(HttpStatusCode.OK, result.StatusCode);
-    }
-
-    [Fact]
-    public async Task Apply_WhenInheritedAttribute_OverrideAllowAnonymous()
-    {
-        // Arrange
-        var client = _fixture.CreateClient();
-
-        // Act
-        var result = await client.GetAsync(
-            new Uri(
-                "/inheritedFakes/override/allowAnonymous",
-                UriKind.Relative
-            )
-        );
-
-        // Assert
-        Assert.Equal(HttpStatusCode.OK, result.StatusCode);
-    }
-
-    [Fact]
-    public async Task Apply_WhenInheritedAttribute_Authorize()
-    {
-        // Arrange
-        var client = _fixture.CreateClient();
-
-        // Act
-        var result = await client.GetAsync(
-            new Uri(
-                "/inheritedFakes/authorize",
-                UriKind.Relative
-            )
-        );
-
-        // Assert
-        Assert.Equal(HttpStatusCode.Unauthorized, result.StatusCode);
-    }
-
-    [Fact]
-    public async Task Apply_WhenInheritedAttribute_AuthorizeWithSwaggerSecurity()
-    {
-        // Arrange
-        var client = _fixture.CreateClient();
-
-        // Act
-        var result = await client.GetAsync(
-            new Uri(
-                "/inheritedFakes/authorizeWithSwaggerSecurity",
-                UriKind.Relative
-            )
-        );
-
-        // Assert
-        Assert.Equal(HttpStatusCode.Unauthorized, result.StatusCode);
-    }
-
-    [Fact]
-    public async Task Apply_WhenInheritedAttribute_SwaggerSecurity()
-    {
-        // Arrange
-        var client = _fixture.CreateClient();
-
-        // Act
-        var result = await client.GetAsync(
-            new Uri(
-                "/inheritedFakes/swaggerSecurity",
-                UriKind.Relative
-            )
-        );
-
-        // Assert
-        Assert.Equal(HttpStatusCode.OK, result.StatusCode);
+        Assert.Equal(expectedStatusCode, result.StatusCode);
     }
 }

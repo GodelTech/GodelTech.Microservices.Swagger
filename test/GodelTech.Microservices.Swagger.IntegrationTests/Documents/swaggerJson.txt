@@ -402,6 +402,127 @@
         },
         "security": [
           {
+            "oauth2": [
+              "fake.edit"
+            ],
+            "oauth2-authorization-code": [
+              "fake.edit"
+            ],
+            "oauth2-client-credentials": [
+              "fake.edit"
+            ],
+            "oauth2-password": [
+              "fake.edit"
+            ],
+            "oauth2-implicit": [
+              "fake.edit"
+            ]
+          }
+        ]
+      }
+    },
+    "/inheritedFakes/authorizeWithSwaggerSecurity": {
+      "get": {
+        "tags": [
+          "InheritedFake"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [
+              "fake.add",
+              "fake.edit"
+            ],
+            "oauth2-authorization-code": [
+              "fake.add",
+              "fake.edit"
+            ],
+            "oauth2-client-credentials": [
+              "fake.add",
+              "fake.edit"
+            ],
+            "oauth2-password": [
+              "fake.add",
+              "fake.edit"
+            ],
+            "oauth2-implicit": [
+              "fake.add",
+              "fake.edit"
+            ]
+          }
+        ]
+      }
+    },
+    "/inheritedFakes/swaggerSecurity": {
+      "get": {
+        "tags": [
+          "InheritedFake"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [
+              "fake.add",
+              "fake.edit"
+            ],
+            "oauth2-authorization-code": [
+              "fake.add",
+              "fake.edit"
+            ],
+            "oauth2-client-credentials": [
+              "fake.add",
+              "fake.edit"
+            ],
+            "oauth2-password": [
+              "fake.add",
+              "fake.edit"
+            ],
+            "oauth2-implicit": [
+              "fake.add",
+              "fake.edit"
+            ]
+          }
+        ]
+      }
+    },
+    "/others/authorize": {
+      "get": {
+        "tags": [
+          "Other"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
             "oauth2": [ ],
             "oauth2-authorization-code": [ ],
             "oauth2-client-credentials": [ ],
@@ -411,10 +532,10 @@
         ]
       }
     },
-    "/inheritedFakes/authorizeWithSwaggerSecurity": {
+    "/others/inherited/authorize": {
       "get": {
         "tags": [
-          "InheritedFake"
+          "Other"
         ],
         "responses": {
           "200": {
@@ -448,16 +569,41 @@
         ]
       }
     },
-    "/inheritedFakes/swaggerSecurity": {
+    "/inherited/authorize": {
       "get": {
         "tags": [
-          "InheritedFake"
+          "OtherControllerBase"
         ],
         "responses": {
           "200": {
             "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
           }
-        }
+        },
+        "security": [
+          {
+            "oauth2": [
+              "fake.add"
+            ],
+            "oauth2-authorization-code": [
+              "fake.add"
+            ],
+            "oauth2-client-credentials": [
+              "fake.add"
+            ],
+            "oauth2-password": [
+              "fake.add"
+            ],
+            "oauth2-implicit": [
+              "fake.add"
+            ]
+          }
+        ]
       }
     }
   },

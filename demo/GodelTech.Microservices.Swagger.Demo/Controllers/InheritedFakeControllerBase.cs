@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace GodelTech.Microservices.Swagger.Demo.Controllers;
 
+[Authorize]
+[SwaggerSecurity("fake.edit")]
 public abstract class InheritedFakeControllerBase : ControllerBase
 {
     [AllowAnonymous]
