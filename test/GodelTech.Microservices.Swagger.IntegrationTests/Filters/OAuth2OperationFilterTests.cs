@@ -38,6 +38,24 @@ public sealed class OAuth2OperationFilterTests : IDisposable
     }
 
     [Fact]
+    public async Task Apply_WhenInheritedAttribute_OverrideAllowAnonymous()
+    {
+        // Arrange
+        var client = _fixture.CreateClient();
+
+        // Act
+        var result = await client.GetAsync(
+            new Uri(
+                "/inheritedFakes/override/allowAnonymous",
+                UriKind.Relative
+            )
+        );
+
+        // Assert
+        Assert.Equal(HttpStatusCode.OK, result.StatusCode);
+    }
+
+    [Fact]
     public async Task Apply_WhenInheritedAttribute_Authorize()
     {
         // Arrange
@@ -47,6 +65,24 @@ public sealed class OAuth2OperationFilterTests : IDisposable
         var result = await client.GetAsync(
             new Uri(
                 "/inheritedFakes/authorize",
+                UriKind.Relative
+            )
+        );
+
+        // Assert
+        Assert.Equal(HttpStatusCode.Unauthorized, result.StatusCode);
+    }
+
+    [Fact]
+    public async Task Apply_WhenInheritedAttribute_AuthorizeWithSwaggerSecurity()
+    {
+        // Arrange
+        var client = _fixture.CreateClient();
+
+        // Act
+        var result = await client.GetAsync(
+            new Uri(
+                "/inheritedFakes/authorizeWithSwaggerSecurity",
                 UriKind.Relative
             )
         );
@@ -70,6 +106,6 @@ public sealed class OAuth2OperationFilterTests : IDisposable
         );
 
         // Assert
-        Assert.Equal(HttpStatusCode.Unauthorized, result.StatusCode);
+        Assert.Equal(HttpStatusCode.OK, result.StatusCode);
     }
 }

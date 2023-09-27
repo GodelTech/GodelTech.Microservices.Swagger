@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace GodelTech.Microservices.Swagger.Demo.Controllers;
 
@@ -11,7 +12,18 @@ public class InheritedFakeController : InheritedFakeControllerBase
         return Ok();
     }
 
+    [AllowAnonymous]
+    public override IActionResult GetOverrideAllowAnonymous()
+    {
+        return Ok();
+    }
+
     public override IActionResult GetAuthorize()
+    {
+        return Ok();
+    }
+
+    public override IActionResult GetAuthorizeWithSwaggerSecurity()
     {
         return Ok();
     }

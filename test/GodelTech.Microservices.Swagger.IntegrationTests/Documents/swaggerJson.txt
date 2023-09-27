@@ -372,6 +372,18 @@
         }
       }
     },
+    "/inheritedFakes/override/allowAnonymous": {
+      "get": {
+        "tags": [
+          "InheritedFake"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/inheritedFakes/authorize": {
       "get": {
         "tags": [
@@ -399,7 +411,7 @@
         ]
       }
     },
-    "/inheritedFakes/swaggerSecurity": {
+    "/inheritedFakes/authorizeWithSwaggerSecurity": {
       "get": {
         "tags": [
           "InheritedFake"
@@ -434,6 +446,18 @@
             ]
           }
         ]
+      }
+    },
+    "/inheritedFakes/swaggerSecurity": {
+      "get": {
+        "tags": [
+          "InheritedFake"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
       }
     }
   },

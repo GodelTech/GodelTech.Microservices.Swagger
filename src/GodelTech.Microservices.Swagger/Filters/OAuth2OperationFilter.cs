@@ -38,9 +38,7 @@ namespace GodelTech.Microservices.Swagger.Filters
                 swaggerSecurityAttributes.AddRange(context.MethodInfo.DeclaringType.GetCustomAttributes(true).OfType<SwaggerSecurityAttribute>());
             }
 
-            var hasAuthorize = authorizeAttributes.Any() || swaggerSecurityAttributes.Any();
-
-            if (!hasAuthorize) return;
+            if (!authorizeAttributes.Any()) return;
 
             var scopes = new List<string>();
 
