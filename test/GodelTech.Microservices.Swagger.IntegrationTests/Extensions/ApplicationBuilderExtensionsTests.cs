@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc.Testing;
+﻿using System;
 using System.Net;
 using System.Threading.Tasks;
-using System;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Xunit;
 
 namespace GodelTech.Microservices.Swagger.IntegrationTests.Extensions;

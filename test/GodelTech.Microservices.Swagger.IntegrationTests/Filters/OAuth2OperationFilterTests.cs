@@ -1,6 +1,6 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Threading.Tasks;
-using System;
 using Xunit;
 
 namespace GodelTech.Microservices.Swagger.IntegrationTests.Filters;
