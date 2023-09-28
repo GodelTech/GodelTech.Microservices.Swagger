@@ -10,7 +10,7 @@ public class ApplicationBuilderExtensionsTests
     {
         // Arrange & Act & Assert
         var exception = Assert.Throws<ArgumentNullException>(
-            () => Swagger.Extensions.ApplicationBuilderExtensions.AddSwaggerRedirectHomePage(null, _ => { })
+            () => Swagger.Extensions.ApplicationBuilderExtensions.AddSwaggerRedirectHomePage(null)
         );
         Assert.Equal("app", exception.ParamName);
     }

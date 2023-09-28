@@ -22,7 +22,7 @@ namespace GodelTech.Microservices.Swagger.Filters
             if (operation == null) throw new ArgumentNullException(nameof(operation));
             if (context == null) throw new ArgumentNullException(nameof(context));
 
-            if (context.MethodInfo.GetCustomAttributes(true).Any(x => x is AllowAnonymousAttribute)) return;
+            if (Array.Exists(context.MethodInfo.GetCustomAttributes(true), x => x is AllowAnonymousAttribute)) return;
 
             var authorizeAttributes = new List<AuthorizeAttribute>();
             var swaggerSecurityAttributes = new List<SwaggerSecurityAttribute>();
@@ -38,9 +38,7 @@ namespace GodelTech.Microservices.Swagger.Filters
                 swaggerSecurityAttributes.AddRange(context.MethodInfo.DeclaringType.GetCustomAttributes(true).OfType<SwaggerSecurityAttribute>());
             }
 
-            var hasAuthorize = authorizeAttributes.Any() || swaggerSecurityAttributes.Any();
-
-            if (!hasAuthorize) return;
+            if (!authorizeAttributes.Any()) return;
 
             var scopes = new List<string>();
 
