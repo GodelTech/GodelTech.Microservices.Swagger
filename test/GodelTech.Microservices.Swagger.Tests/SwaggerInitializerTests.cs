@@ -6,6 +6,7 @@ using System.Linq;
 using FluentAssertions;
 using GodelTech.Microservices.Swagger.Filters;
 using GodelTech.Microservices.Swagger.Tests.Fakes;
+using GodelTech.Microservices.Swagger.Utilities;
 using Microsoft.OpenApi.Models;
 using Moq;
 using Swashbuckle.AspNetCore.Swagger;
@@ -17,6 +18,13 @@ namespace GodelTech.Microservices.Swagger.Tests;
 
 public class SwaggerInitializerTests
 {
+    private readonly Mock<IVersion> _mockVersion;
+
+    public SwaggerInitializerTests()
+    {
+        _mockVersion = new Mock<IVersion>(MockBehavior.Strict);
+    }
+
     public static IEnumerable<object[]> SwaggerGenOptionsMemberData =>
         new Collection<object[]>
         {
@@ -75,6 +83,10 @@ public class SwaggerInitializerTests
         // Arrange
         var options = new SwaggerGenOptions();
 
+        _mockVersion
+            .Setup(x => x.GetVersion("Test DocumentVersion"))
+            .Returns("1.2.3.4");
+
         var initializer = new FakeSwaggerInitializer(
             swaggerInitializerOptions =>
             {
@@ -82,13 +94,14 @@ public class SwaggerInitializerTests
                 swaggerInitializerOptions.DocumentVersion = "Test DocumentVersion";
                 swaggerInitializerOptions.AuthorizationUrl = authorizationUri;
                 swaggerInitializerOptions.TokenUrl = tokenUri;
-            }
+            },
+            _mockVersion.Object
         );
 
         var expectedOpeApiInfo = new OpenApiInfo
         {
             Title = "Test DocumentTitle",
-            Version = "Test DocumentVersion"
+            Version = "1.2.3.4"
         };
 
         // Act
@@ -134,6 +147,10 @@ public class SwaggerInitializerTests
         // Arrange
         var options = new SwaggerGenOptions();
 
+        _mockVersion
+            .Setup(x => x.GetVersion("Test DocumentVersion"))
+            .Returns("1.2.3.4");
+
         var initializer = new FakeSwaggerInitializer(
             swaggerInitializerOptions =>
             {
@@ -142,13 +159,14 @@ public class SwaggerInitializerTests
                 swaggerInitializerOptions.AuthorizationUrl = authorizationUri;
                 swaggerInitializerOptions.TokenUrl = tokenUri;
                 swaggerInitializerOptions.XmlCommentsFilePath = Path.GetFullPath("Documents/swagger.xml");
-            }
+            },
+            _mockVersion.Object
         );
 
         var expectedOpeApiInfo = new OpenApiInfo
         {
             Title = "Test DocumentTitle",
-            Version = "Test DocumentVersion"
+            Version = "1.2.3.4"
         };
 
         // Act
@@ -189,7 +207,7 @@ public class SwaggerInitializerTests
         // Arrange
         var mockOptions = new Mock<SwaggerOptions>(MockBehavior.Strict);
 
-        var initializer = new FakeSwaggerInitializer(null);
+        var initializer = new FakeSwaggerInitializer(null, _mockVersion.Object);
 
         // Act
         initializer.ExposedConfigureSwaggerOptions(mockOptions.Object);
@@ -210,7 +228,8 @@ public class SwaggerInitializerTests
             swaggerInitializerOptions =>
             {
                 swaggerInitializerOptions.DocumentVersion = "Test DocumentVersion";
-            }
+            },
+            _mockVersion.Object
         );
 
         // Act
