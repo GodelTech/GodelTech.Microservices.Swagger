@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using GodelTech.Microservices.Core;
 using GodelTech.Microservices.Swagger.Extensions;
 using GodelTech.Microservices.Swagger.Filters;
@@ -12,6 +13,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using Swashbuckle.AspNetCore.SwaggerUI;
 
 [assembly: CLSCompliant(false)]
+[assembly: InternalsVisibleTo("GodelTech.Microservices.Swagger.Tests")]
 namespace GodelTech.Microservices.Swagger
 {
     /// <summary>

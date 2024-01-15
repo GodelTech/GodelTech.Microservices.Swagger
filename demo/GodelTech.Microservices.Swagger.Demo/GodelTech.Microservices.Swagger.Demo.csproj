@@ -3,6 +3,8 @@
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
 
+    <AssemblyVersion>1.2.3.4567</AssemblyVersion>
+
     <!-- SonarQube needs this -->
     <ProjectGuid>{00000000-0000-0000-0000-000000000030}</ProjectGuid>
 
