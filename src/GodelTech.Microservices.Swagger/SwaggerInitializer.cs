@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using GodelTech.Microservices.Core;
 using GodelTech.Microservices.Swagger.Extensions;
 using GodelTech.Microservices.Swagger.Filters;
+using GodelTech.Microservices.Swagger.Utilities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,6 +13,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using Swashbuckle.AspNetCore.SwaggerUI;
 
 [assembly: CLSCompliant(false)]
+[assembly: InternalsVisibleTo("GodelTech.Microservices.Swagger.Tests")]
 namespace GodelTech.Microservices.Swagger
 {
     /// <summary>
@@ -19,6 +22,7 @@ namespace GodelTech.Microservices.Swagger
     public class SwaggerInitializer : IMicroserviceInitializer
     {
         private readonly SwaggerInitializerOptions _options = new SwaggerInitializerOptions();
+        private readonly IVersion _version;
 
         private SwaggerUIOptions _swaggerUIOptions = new SwaggerUIOptions();
 
@@ -26,9 +30,13 @@ namespace GodelTech.Microservices.Swagger
         /// Initializes a new instance of the <see cref="SwaggerInitializer"/> class.
         /// </summary>
         /// <param name="configure">An <see cref="Action{SwaggerInitializerOptions}"/> to configure the provided <see cref="SwaggerInitializerOptions"/>.</param>
-        public SwaggerInitializer(Action<SwaggerInitializerOptions> configure = null)
+        /// <param name="version">The Version utility.</param>
+        public SwaggerInitializer(
+            Action<SwaggerInitializerOptions> configure = null,
+            IVersion version = default(SystemVersion))
         {
             configure?.Invoke(_options);
+            _version = version ?? new SystemVersion();
         }
 
         /// <inheritdoc />
@@ -86,7 +94,7 @@ namespace GodelTech.Microservices.Swagger
                 new OpenApiInfo
                 {
                     Title = _options.DocumentTitle,
-                    Version = _options.DocumentVersion
+                    Version = _version.GetVersion(_options.DocumentVersion)
                 }
             );
 

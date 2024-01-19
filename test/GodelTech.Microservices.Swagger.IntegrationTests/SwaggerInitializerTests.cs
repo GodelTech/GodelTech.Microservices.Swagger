@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Xunit;
@@ -62,6 +63,13 @@ public sealed class SwaggerInitializerTests : IDisposable
         expectedResultValue = expectedResultValue.Replace(
             Environment.NewLine,
             "\n",
+            StringComparison.InvariantCulture
+        );
+
+        // replace version with AssemblyVersion
+        expectedResultValue = expectedResultValue.Replace(
+            "\"version\": \"v2\"",
+            $"\"version\": \"{Assembly.GetEntryAssembly()?.GetName().Version?.ToString()}\"",
             StringComparison.InvariantCulture
         );
 
