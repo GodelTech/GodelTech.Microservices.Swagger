@@ -19,8 +19,8 @@ namespace GodelTech.Microservices.Swagger.Filters
         /// <param name="context">OperationFilterContext.</param>
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
-            if (operation == null) throw new ArgumentNullException(nameof(operation));
-            if (context == null) throw new ArgumentNullException(nameof(context));
+            ArgumentNullException.ThrowIfNull(operation);
+            ArgumentNullException.ThrowIfNull(context);
 
             if (Array.Exists(context.MethodInfo.GetCustomAttributes(true), x => x is AllowAnonymousAttribute)) return;
 
@@ -38,7 +38,7 @@ namespace GodelTech.Microservices.Swagger.Filters
                 swaggerSecurityAttributes.AddRange(context.MethodInfo.DeclaringType.GetCustomAttributes(true).OfType<SwaggerSecurityAttribute>());
             }
 
-            if (!authorizeAttributes.Any()) return;
+            if (authorizeAttributes.Count == 0) return;
 
             var scopes = new List<string>();
 

@@ -52,7 +52,7 @@ public class FakeController : ControllerBase
     [ProducesResponseType(typeof(FakeModel), StatusCodes.Status201Created)]
     public IActionResult Post([FromBody] FakePostModel model)
     {
-        if (model == null) throw new ArgumentNullException(nameof(model));
+        ArgumentNullException.ThrowIfNull(model);
 
         var item = new FakeModel
         {
@@ -75,7 +75,7 @@ public class FakeController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public IActionResult Put(int id, FakePutModel model)
     {
-        if (model == null) throw new ArgumentNullException(nameof(model));
+        ArgumentNullException.ThrowIfNull(model);
 
         if (id != model.Id)
         {
