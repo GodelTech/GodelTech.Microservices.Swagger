@@ -38,7 +38,9 @@ namespace GodelTech.Microservices.Swagger.Filters
                 swaggerSecurityAttributes.AddRange(context.MethodInfo.DeclaringType.GetCustomAttributes(true).OfType<SwaggerSecurityAttribute>());
             }
 
+#pragma warning disable S2589 // https://github.com/SonarSource/sonar-dotnet/issues/8570
             if (authorizeAttributes.Count == 0) return;
+#pragma warning restore S2589
 
             var scopes = new List<string>();
 
