@@ -39,7 +39,7 @@ namespace GodelTech.Microservices.Swagger.Extensions
             this SwaggerGenOptions options,
             SwaggerInitializerOptions initializerOptions)
         {
-            if (initializerOptions == null) throw new ArgumentNullException(nameof(initializerOptions));
+            ArgumentNullException.ThrowIfNull(initializerOptions);
             if (initializerOptions.AuthorizationUrl == null) throw new ArgumentException("AuthorizationUrl can't be null");
             if (initializerOptions.TokenUrl == null) throw new ArgumentException("TokenUrl can't be null");
             if (initializerOptions.Scopes == null) throw new ArgumentException("Scopes can't be null");
@@ -71,7 +71,7 @@ namespace GodelTech.Microservices.Swagger.Extensions
             this SwaggerGenOptions options,
             SwaggerInitializerOptions initializerOptions)
         {
-            if (initializerOptions == null) throw new ArgumentNullException(nameof(initializerOptions));
+            ArgumentNullException.ThrowIfNull(initializerOptions);
             if (initializerOptions.TokenUrl == null) throw new ArgumentException("TokenUrl can't be null");
             if (initializerOptions.Scopes == null) throw new ArgumentException("Scopes can't be null");
 
@@ -101,7 +101,7 @@ namespace GodelTech.Microservices.Swagger.Extensions
             this SwaggerGenOptions options,
             SwaggerInitializerOptions initializerOptions)
         {
-            if (initializerOptions == null) throw new ArgumentNullException(nameof(initializerOptions));
+            ArgumentNullException.ThrowIfNull(initializerOptions);
             if (initializerOptions.AuthorizationUrl == null) throw new ArgumentException("AuthorizationUrl can't be null");
             if (initializerOptions.TokenUrl == null) throw new ArgumentException("TokenUrl can't be null");
             if (initializerOptions.Scopes == null) throw new ArgumentException("Scopes can't be null");
@@ -131,7 +131,7 @@ namespace GodelTech.Microservices.Swagger.Extensions
         /// <param name="initializerOptions">The Swagger initializer options.</param>
         public static void AddImplicitFlowSecurityDefinition(this SwaggerGenOptions options, SwaggerInitializerOptions initializerOptions)
         {
-            if (initializerOptions == null) throw new ArgumentNullException(nameof(initializerOptions));
+            ArgumentNullException.ThrowIfNull(initializerOptions);
             if (initializerOptions.AuthorizationUrl == null) throw new ArgumentException("AuthorizationUrl can't be null");
             if (initializerOptions.Scopes == null) throw new ArgumentException("Scopes can't be null");
 

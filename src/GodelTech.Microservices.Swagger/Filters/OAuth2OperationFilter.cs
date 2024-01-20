@@ -19,8 +19,8 @@ namespace GodelTech.Microservices.Swagger.Filters
         /// <param name="context">OperationFilterContext.</param>
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
-            if (operation == null) throw new ArgumentNullException(nameof(operation));
-            if (context == null) throw new ArgumentNullException(nameof(context));
+            ArgumentNullException.ThrowIfNull(operation);
+            ArgumentNullException.ThrowIfNull(context);
 
             if (Array.Exists(context.MethodInfo.GetCustomAttributes(true), x => x is AllowAnonymousAttribute)) return;
 
@@ -38,7 +38,9 @@ namespace GodelTech.Microservices.Swagger.Filters
                 swaggerSecurityAttributes.AddRange(context.MethodInfo.DeclaringType.GetCustomAttributes(true).OfType<SwaggerSecurityAttribute>());
             }
 
-            if (!authorizeAttributes.Any()) return;
+#pragma warning disable S2589 // https://github.com/SonarSource/sonar-dotnet/issues/8570
+            if (authorizeAttributes.Count == 0) return;
+#pragma warning restore S2589
 
             var scopes = new List<string>();
 

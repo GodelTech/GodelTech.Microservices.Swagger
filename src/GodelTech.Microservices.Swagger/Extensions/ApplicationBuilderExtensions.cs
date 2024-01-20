@@ -17,7 +17,7 @@ namespace GodelTech.Microservices.Swagger.Extensions
         /// <param name="swaggerUiOptions"><see cref="SwaggerUIOptions"/>.</param>
         public static void AddSwaggerRedirectHomePage(this IApplicationBuilder app, SwaggerUIOptions swaggerUiOptions = default)
         {
-            if (app == null) throw new ArgumentNullException(nameof(app));
+            ArgumentNullException.ThrowIfNull(app);
             if (swaggerUiOptions == null) swaggerUiOptions = new SwaggerUIOptions();
 
             app.UseEndpoints(
