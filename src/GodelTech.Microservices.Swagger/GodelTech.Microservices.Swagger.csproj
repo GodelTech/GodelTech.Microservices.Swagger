@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
     <PackageId>GodelTech.Microservices.Swagger</PackageId>
     <VersionPrefix>2.0.0</VersionPrefix>
     <Authors>Andrei Salanoi;Vladimir Rodchenko;Andrei Yaskevich</Authors>
@@ -31,6 +31,11 @@
     <ProjectGuid>{00000000-0000-0000-0000-000000000010}</ProjectGuid>
   </PropertyGroup>
 
+  <!-- https://github.com/domaindrivendev/Swashbuckle.AspNetCore/issues/1275 -->
+  <PropertyGroup>
+    <OpenApiGenerateDocuments>false</OpenApiGenerateDocuments>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Include="..\..\icon.png">
       <Pack>True</Pack>
@@ -43,13 +48,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="GodelTech.Microservices.Core" Version="8.0.0" />
+    <PackageReference Include="GodelTech.Microservices.Core" Version="8.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.5.0" />
 
     <!-- Source Link needs this -->
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
   </ItemGroup>
-
 
 </Project>
