@@ -96,7 +96,7 @@
             configObject.layout = "StandaloneLayout";
 
             // Parse and add interceptor functions
-            var interceptors = JSON.parse('{"RequestInterceptorFunction":null,"ResponseInterceptorFunction":null}');
+            var interceptors = JSON.parse('{}');
             if (interceptors.RequestInterceptorFunction)
                 configObject.requestInterceptor = parseFunction(interceptors.RequestInterceptorFunction);
             if (interceptors.ResponseInterceptorFunction)

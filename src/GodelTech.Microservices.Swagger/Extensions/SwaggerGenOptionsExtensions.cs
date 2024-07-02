@@ -10,6 +10,8 @@ namespace GodelTech.Microservices.Swagger.Extensions
     /// </summary>
     public static class SwaggerGenOptionsExtensions
     {
+        private const string NullScopesExceptionMessage = "Scopes can't be null";
+
         /// <summary>
         /// Add AuthHeaderFlow "securityDefinitions", describing how your API is protected, to the generated Swagger
         /// </summary>
@@ -42,7 +44,7 @@ namespace GodelTech.Microservices.Swagger.Extensions
             ArgumentNullException.ThrowIfNull(initializerOptions);
             if (initializerOptions.AuthorizationUrl == null) throw new ArgumentException("AuthorizationUrl can't be null");
             if (initializerOptions.TokenUrl == null) throw new ArgumentException("TokenUrl can't be null");
-            if (initializerOptions.Scopes == null) throw new ArgumentException("Scopes can't be null");
+            if (initializerOptions.Scopes == null) throw new ArgumentException(NullScopesExceptionMessage);
 
             options.AddSecurityDefinition(
                 OAuth2Security.AuthorizationCode,
@@ -73,7 +75,7 @@ namespace GodelTech.Microservices.Swagger.Extensions
         {
             ArgumentNullException.ThrowIfNull(initializerOptions);
             if (initializerOptions.TokenUrl == null) throw new ArgumentException("TokenUrl can't be null");
-            if (initializerOptions.Scopes == null) throw new ArgumentException("Scopes can't be null");
+            if (initializerOptions.Scopes == null) throw new ArgumentException(NullScopesExceptionMessage);
 
             options.AddSecurityDefinition(
                 OAuth2Security.ClientCredentials,
@@ -104,7 +106,7 @@ namespace GodelTech.Microservices.Swagger.Extensions
             ArgumentNullException.ThrowIfNull(initializerOptions);
             if (initializerOptions.AuthorizationUrl == null) throw new ArgumentException("AuthorizationUrl can't be null");
             if (initializerOptions.TokenUrl == null) throw new ArgumentException("TokenUrl can't be null");
-            if (initializerOptions.Scopes == null) throw new ArgumentException("Scopes can't be null");
+            if (initializerOptions.Scopes == null) throw new ArgumentException(NullScopesExceptionMessage);
 
             options.AddSecurityDefinition(
                 OAuth2Security.ResourceOwnerPasswordCredentials,
@@ -133,7 +135,7 @@ namespace GodelTech.Microservices.Swagger.Extensions
         {
             ArgumentNullException.ThrowIfNull(initializerOptions);
             if (initializerOptions.AuthorizationUrl == null) throw new ArgumentException("AuthorizationUrl can't be null");
-            if (initializerOptions.Scopes == null) throw new ArgumentException("Scopes can't be null");
+            if (initializerOptions.Scopes == null) throw new ArgumentException(NullScopesExceptionMessage);
 
             options.AddSecurityDefinition(
                 OAuth2Security.Implicit,
