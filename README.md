@@ -1,6 +1,6 @@
 # GodelTech.Microservices.Swagger 
 
-# Description
+## Description
 The GodelTech.Microservices.Swagger repository is designed to integrate Swagger into microservices developed using C#. It provides tools and configurations to seamlessly incorporate Swagger documentation and UI into microservices, ensuring that APIs are well-documented and easy to interact with.
 
 ## Overview
@@ -71,5 +71,5 @@ Full control over `SwaggerInitializer` can be obtained by defined child class. T
 
 Current project is Swagger extension of Microservice Framework. You can find references to all available projects in core project of framework [GodelTech.Microservices.Core](https://github.com/GodelTech/GodelTech.Microservices.Core). Extension is based on [Swashbuckle.AspNetCore](https://github.com/domaindrivendev/Swashbuckle.AspNetCore) project.
 
-# License
+## License
 This project is licensed under the MIT License. See the LICENSE file for more details.
